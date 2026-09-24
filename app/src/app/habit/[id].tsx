@@ -38,6 +38,7 @@ function Detail({ h }: { h: Habit }) {
   const light = LIGHT_ACCENTS.includes(h.color);
   const hc = light ? '#1F2A24' : '#FFFFFF';
   const weekly = isWeekly(h);
+  const longName = h.name.length > 14;
 
   const cur = currentStreak(state, h, today);
   const best = useMemo(() => bestStreak(state, h, today), [state, h, today]);
@@ -98,9 +99,9 @@ function Detail({ h }: { h: Habit }) {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', paddingTop: 22, paddingHorizontal: 20, gap: 12 }}>
-          <View style={{ flex: 1, minWidth: 0 }}>
-            <Txt size={32} w={900} ls={-0.8} lh={1.05} numberOfLines={2} accessibilityRole="header">{h.name}</Txt>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', paddingTop: 22, paddingHorizontal: 20, gap: 12 }}>
+          <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: longName ? '100%' : 0, minWidth: 0 }}>
+            <Txt size={longName ? 28 : 32} w={900} ls={-0.8} lh={1.05} numberOfLines={3} accessibilityRole="header">{h.name}</Txt>
             <Txt size={14} w={400} color={p.secondary} style={{ marginTop: 2 }}>{h.paused ? 'Paused' : scheduleLine(sch, h.reminder)}</Txt>
           </View>
           <Card edge={p.line} bg={p.surface} radius={22} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 6, paddingLeft: 14, paddingRight: 6 }}>

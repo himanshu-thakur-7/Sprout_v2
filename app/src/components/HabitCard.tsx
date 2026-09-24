@@ -77,7 +77,7 @@ export const HabitCard = forwardRef<View, HabitCardProps>(function HabitCard(
         <Icon n={icon} c={a.base} s={26} />
       </View>
       <View style={{ flex: 1, minWidth: 0, gap: 1 }}>
-        <Txt size={18} w={800} ls={-0.2} color={titleColor} numberOfLines={1} strike={done ? p.tertiary : undefined}>{title}</Txt>
+        <Txt size={18} w={800} ls={-0.2} color={titleColor} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8} strike={done ? p.tertiary : undefined}>{title}</Txt>
         <Txt size={14} w={400} color={p.secondary} numberOfLines={1}>{sub}</Txt>
       </View>
       <View ref={controlRef} collapsable={false}>

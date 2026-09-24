@@ -53,17 +53,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const stateRef = useRef(state);
   useEffect(() => { todayRef.current = today; stateRef.current = state; }, [today, state]);
 
+  /**
+   * Apply a change to today's entry. The same pure update goes to React state and,
+   * synchronously, to stateRef, so rapid taps see each other before the next render.
+   */
   const setEntry = useCallback((id: string, fn: (n: number, h: Habit) => number) => {
-    setState(s => {
+    const d = todayRef.current, t = minutesNow();
+    const apply = (s: State): State => {
       const h = s.habits.find(x => x.id === id);
       if (!h) return s;
-      const d = todayRef.current;
       const n = fn(s.logs[d]?.[id]?.n ?? 0, h);
       const day = { ...(s.logs[d] ?? {}) };
       if (n <= 0) delete day[id];
-      else day[id] = { n, t: minutesNow() };
+      else day[id] = { n, t };
       return { ...s, logs: { ...s.logs, [d]: day } };
-    });
+    };
+    stateRef.current = apply(stateRef.current);
+    setState(apply);
   }, []);
 
   const actions = useMemo<Actions>(() => ({
@@ -73,8 +79,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const d = todayRef.current, t = target(h), was = isDone(s, h, d);
       // Counters add one per tap; tapping a full counter takes one back. Others toggle.
       setEntry(id, n => (t > 1 ? (n >= t ? t - 1 : n + 1) : n >= 1 ? 0 : 1));
-      const n = s.logs[d]?.[id]?.n ?? 0;
-      return !was && (t > 1 ? n + 1 >= t : true);
+      return !was && isDone(stateRef.current, h, d);
     },
     untap: id => setEntry(id, n => n - 1),
     addHabit: h => setState(s => ({
