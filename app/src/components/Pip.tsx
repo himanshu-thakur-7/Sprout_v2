@@ -87,6 +87,18 @@ export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = tr
   }, [alive, only, breathe]);
   const bodyStyle = useAnimatedStyle(() => ({ transform: [{ translateY: (by.value + breathe.value) * k }] }));
 
+  // Leaves sway ±3° around the stem tip while idle.
+  const sway = useSharedValue(0);
+  useEffect(() => {
+    if (!alive || only) return;
+    sway.value = withRepeat(withSequence(
+      withTiming(3, { duration: 1500, easing: Easing.inOut(Easing.sin) }),
+      withTiming(-3, { duration: 1500, easing: Easing.inOut(Easing.sin) }),
+    ), -1, true);
+    return () => cancelAnimation(sway);
+  }, [alive, only, sway]);
+  const swayStyle = useAnimatedStyle(() => ({ transform: [{ rotate: `${sway.value}deg` }] }));
+
   const show = (id: PipPart) => !only || only === id;
   const part = (id: PipPart, ...kids: ReactNode[]) =>
     show(id) ? <G>{kids.map((el, i) => <Fragment key={i}>{el}</Fragment>)}</G> : null;
@@ -206,6 +218,8 @@ export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = tr
 
   const squash = c.sy ? `translate(100 210) scale(1 ${c.sy}) translate(-100 -210)` : undefined;
   const h = size * 1.2;
+  // Stem tip (100, 46) after the droopy squash, in points: the leaves' pivot.
+  const tipY = (c.sy ? 210 - (210 - 46) * c.sy : 46) * k;
 
   return (
     <View style={{ width: size, height: h }} pointerEvents="none">
@@ -217,9 +231,16 @@ export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = tr
       <Animated.View style={[{ position: 'absolute', width: size, height: h }, bodyStyle]}>
         <Svg viewBox="0 0 200 240" width={size} height={h} style={{ overflow: 'visible' }}>
           <G transform={squash}>
-            {feet}{body}{legs}{leaves}{eyesPart}{blush}{mouth}{arms}{pr}{hands}{zz}
+            {feet}{body}{legs}{eyesPart}{blush}{mouth}{arms}{pr}{hands}{zz}
           </G>
         </Svg>
+        {leaves ? (
+          <Animated.View style={[{ position: 'absolute', width: size, height: h, transformOrigin: [100 * k, tipY, 0] }, swayStyle]}>
+            <Svg viewBox="0 0 200 240" width={size} height={h} style={{ overflow: 'visible' }}>
+              <G transform={squash}>{leaves}</G>
+            </Svg>
+          </Animated.View>
+        ) : null}
       </Animated.View>
     </View>
   );

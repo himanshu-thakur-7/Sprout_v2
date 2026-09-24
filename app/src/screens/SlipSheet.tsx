@@ -12,6 +12,8 @@ import { springEaseFn } from '@/theme/motion';
 import { usePalette } from '@/theme/ThemeProvider';
 import { currentStreak, perfectDayCount, shieldInfo, type Slip } from '@/state/logic';
 import { useStore } from '@/state/store';
+import { TEMPLATES } from '@/state/templates';
+import type { Habit } from '@/state/types';
 import { successHaptic } from '@/utils/haptics';
 
 const SHIELD = ACCENTS.lavender;
@@ -82,7 +84,7 @@ export function SlipSheet({ slip, onLater }: { slip: Slip | null; onLater: (key:
         <Txt size={28} w={900} color={ACCENTS[s.habit.color].edge} strike={ACCENTS[s.habit.color].edge} style={{ position: 'absolute', right: -8, bottom: 6 }}>{s.lost}</Txt>
       </View>
       <Txt size={28} w={900} ls={-0.6} lh={1.1} align="center" style={{ marginTop: 16, maxWidth: 300 }} accessibilityRole="header">
-        {`Your ${s.habit.name.toLowerCase()} streak slipped`}
+        {`Your ${streakNoun(s.habit)} streak slipped`}
       </Txt>
       <Txt size={16} w={400} color={p.secondary} style={{ marginTop: 8 }}>{`${unit(s.lost)} is worth saving.`}</Txt>
       <View style={{ marginTop: 14, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 6, paddingLeft: 10, paddingRight: 14, borderRadius: 16, backgroundColor: p.dark ? accentFor('lavender', p).tint : SHIELD.tint }}>
@@ -130,4 +132,11 @@ function SavedFlame({ base, ink, n }: { base: string; ink: string; n: number }) 
       </Animated.View>
     </View>
   );
+}
+
+/** "meditation", "reading"… for the starter habits; the habit's own name otherwise. */
+const NOUNS: Record<string, string> = { water: 'water', gym: 'gym', read: 'reading', meditate: 'meditation', walk: 'walking', sleep: 'sleep', eat: 'eating-well' };
+function streakNoun(h: Habit): string {
+  const t = TEMPLATES.find(x => x.name === h.name && x.icon === h.icon);
+  return t ? NOUNS[t.id] : h.name.toLowerCase();
 }

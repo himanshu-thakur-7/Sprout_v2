@@ -10,7 +10,7 @@ export default function TabsLayout() {
   const { openAdd } = useAddHabit();
   return (
     <Tabs
-      screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: p.bg } }}
+      screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: p.bg }, animation: 'fade' }}
       tabBar={({ state, navigation }) => {
         const current = state.routes[state.index]?.name;
         const active = (Object.keys(ROUTE) as NavTab[]).find(k => ROUTE[k] === current) ?? 'today';
