@@ -37,6 +37,25 @@
           "imageWidth": 160,
           "backgroundColor": "#FBF7F0"
         }
+      ],
+      "expo-asset",
+      [
+        "expo-widgets",
+        {
+          "widgets": [
+            {
+              "name": "SproutWidget",
+              "displayName": "Sprout",
+              "description": "Today's habits, and Pip.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium"
+                ]
+              }
+            }
+          ]
+        }
       ]
     ],
     "experiments": {

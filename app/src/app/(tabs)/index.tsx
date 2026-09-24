@@ -13,12 +13,14 @@ import { Card } from '@/components/Ledge';
 import { Pip, type PipMood } from '@/components/Pip';
 import { Txt } from '@/components/Txt';
 import { useAddHabit } from '@/screens/AddHabitSheet';
+import { RecapEntry } from '@/screens/RecapEntry';
 import { SlipSheet } from '@/screens/SlipSheet';
 import { ACCENTS, accentFor, GOLD, GREEN } from '@/theme/colors';
 import { springEaseFn } from '@/theme/motion';
 import { usePalette } from '@/theme/ThemeProvider';
 import { longDate, parseDay } from '@/state/dates';
 import { currentStreak, dueOn, findSlip, isDone, isPerfectDay, liveHabits, monthDays, statusOn } from '@/state/logic';
+import { buildRecap, recapOffered, recapWeek } from '@/state/recap';
 import { useStore } from '@/state/store';
 import type { Habit } from '@/state/types';
 import { cardFor } from '@/state/view';
@@ -59,6 +61,7 @@ function Today() {
 
   // Streak slips: shown once per missed period until the person decides.
   const [snoozed, setSnoozed] = useState<string[]>([]);
+  const recap = recapOffered(today) && !state.recapSeen.includes(recapWeek(today)) ? buildRecap(state, today) : null;
   const slip = active.map(h => findSlip(state, h, today)).find(s => s && !snoozed.includes(s.key)) ?? null;
 
   // Pip cheers for a beat after each check-off, then settles.
@@ -129,6 +132,7 @@ function Today() {
           {bubble ? <View style={{ position: 'absolute', left: width / 2 + 61, top: 20 }}><Bubble text={bubble} /></View> : null}
         </View>
 
+        {recap && !empty ? <View style={{ paddingHorizontal: 20, marginBottom: 16 }}><RecapEntry recap={recap} /></View> : null}
         {empty ? (
           <Card edge={p.line} bg={p.surface} outerStyle={{ marginTop: 4, marginHorizontal: 20 }}
             style={{ paddingTop: 26, paddingHorizontal: 22, paddingBottom: 22, alignItems: 'center', gap: 8 }}>

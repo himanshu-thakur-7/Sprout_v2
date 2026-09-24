@@ -15,7 +15,7 @@ Checks: `npm run typecheck` and `npm run lint`.
 
 To see a lived-in account, tap **I already have an account** on the welcome screen. There are no accounts yet, so it offers to load the sample garden from the designs: Water, Gym, Read, Meditate and Walk, with a few months of history.
 
-## What's built (pass 1)
+## What's built
 
 | Design | Where |
 | --- | --- |
@@ -29,8 +29,9 @@ To see a lived-in account, tap **I already have an account** on the welcome scre
 | 13–14 Streak slipped and Shield used | `src/screens/SlipSheet.tsx` |
 | 15 Progress (Week / Month) | `src/app/(tabs)/progress.tsx` |
 | 16 You | `src/app/(tabs)/you.tsx` |
-
-Not yet built: the weekly recap stories and dark recap card, and the lock screen and widgets (17–23).
+| 17–21 Weekly recap stories + dark recap card | `src/app/recap.tsx`, `src/screens/StoryCard.tsx`, `src/state/recap.ts` |
+| 22 Lock screen notifications | `src/state/reminders.ts`, `src/state/nudge.ts`, Pip app icon in `assets/` |
+| 23 Home screen widgets (iOS, small + medium) | `src/widgets/` |
 
 ## How it works
 
@@ -40,6 +41,9 @@ Not yet built: the weekly recap stories and dark recap card, and the lock screen
 - **The daily badge** counts only habits due today. Rest days, weeks that are already met, and paused habits sit in the dashed rows below the cards.
 - **Shields**: everyone starts with one and earns another every 14 perfect days. When the most recent due day (or week) was missed with a live streak behind it, Today offers the Streak slipped sheet.
 - **Reminders** (`src/state/reminders.ts`) are local notifications, scheduled only after the person says yes on step 04 or turns Reminders on in You.
+- **Weekly recap**: offered on Today from Sunday to Wednesday until watched, and always reachable from Progress. It shows up to four habit cards (shield saves first, then perfect weeks, growing weekly streaks, steady weeks, and ones that "could use a little love"), then the week's total. Cards auto-advance after 5 s.
+- **Evening nudge**: at 8 pm, if a streak of 2+ is at risk, one notification such as "Still time to keep your 11-day streak alive 🔥 / Four glasses to go before bed." It's rescheduled whenever today's logs change and cancelled once nothing is at risk.
+- **Widgets** use `expo-widgets` (SwiftUI via `@expo/ui`). The app pushes a timeline (now, 8 pm dusk, midnight) and copies Pip's mood images (`assets/widget/`) into the shared app-group folder. Widgets need a development build (`npx expo run:ios` or EAS); they don't run in Expo Go, and Android widgets aren't built.
 - **Interaction**: tap a card to log it, and hold a card for its detail page. Progress rows also open the detail page.
 
 ## Notes on the design

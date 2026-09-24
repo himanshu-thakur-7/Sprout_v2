@@ -20,6 +20,7 @@ type Actions = {
   loadDemo: () => void;
   spendShield: (slipKey: string) => void;
   dismissSlip: (slipKey: string) => void;
+  markRecapSeen: (week: string) => void;
   setSettings: (patch: Partial<State['settings']>) => void;
   setName: (name: string) => void;
   reset: () => void;
@@ -92,6 +93,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     loadDemo: () => setState(demoState(todayRef.current)),
     spendShield: key => setState(s => ({ ...s, shielded: [...s.shielded, key] })),
     dismissSlip: key => setState(s => ({ ...s, dismissedSlips: [...s.dismissedSlips, key] })),
+    markRecapSeen: week => setState(s => (s.recapSeen.includes(week) ? s : { ...s, recapSeen: [...s.recapSeen, week] })),
     setSettings: patch => setState(s => ({ ...s, settings: { ...s.settings, ...patch } })),
     setName: name => setState(s => ({ ...s, profile: { ...s.profile, name } })),
     reset: () => setState(EMPTY_STATE),

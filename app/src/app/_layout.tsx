@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AddHabitProvider } from '@/screens/AddHabitSheet';
 import { useReminderSync } from '@/state/reminders';
+import { useWidgetSync } from '@/widgets/sync';
 import { StoreProvider, useStore } from '@/state/store';
 import { ThemeProvider, usePalette } from '@/theme/ThemeProvider';
 
@@ -25,8 +26,9 @@ export default function RootLayout() {
 }
 
 function Themed({ fontsLoaded }: { fontsLoaded: boolean }) {
-  const { state, ready } = useStore();
-  useReminderSync(state, ready);
+  const { state, ready, today } = useStore();
+  useReminderSync(state, ready, today);
+  useWidgetSync(state, ready, today);
   const show = fontsLoaded && ready;
   useEffect(() => { if (show) SplashScreen.hideAsync().catch(() => {}); }, [show]);
   if (!show) return null;
@@ -49,6 +51,7 @@ function Navigator() {
         <Stack.Protected guard={state.onboarded}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="habit/[id]" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="recap" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
         </Stack.Protected>
         <Stack.Protected guard={!state.onboarded}>
           <Stack.Screen name="onboarding" />

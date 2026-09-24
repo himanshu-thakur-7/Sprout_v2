@@ -42,6 +42,8 @@ export type State = {
   shielded: string[];
   /** Slips the person chose to let go ("Start fresh today"). Same key format. */
   dismissedSlips: string[];
+  /** Week keys (Mondays) whose recap has been watched. */
+  recapSeen: string[];
   profile: { name: string; since: DayKey | null };
   settings: { reminders: boolean; theme: ThemePref; notificationsAsked: boolean };
 };

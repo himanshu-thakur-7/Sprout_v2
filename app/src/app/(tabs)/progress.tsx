@@ -12,6 +12,8 @@ import { accentFor, GREEN } from '@/theme/colors';
 import { usePalette } from '@/theme/ThemeProvider';
 import { addDays, monthName, parseDay, WEEKDAY_LETTERS, weekday, weekRange, weekStart, type DayKey } from '@/state/dates';
 import { count, isDone, isPlannedDay, liveHabits, monthDays, monthRate, target, weekCount } from '@/state/logic';
+import { RecapEntry } from '@/screens/RecapEntry';
+import { buildRecap } from '@/state/recap';
 import { useStore } from '@/state/store';
 import type { Habit, State } from '@/state/types';
 
@@ -40,6 +42,7 @@ export default function Progress() {
   const t = parseDay(today);
   const ws = weekStart(today);
 
+  const recap = useMemo(() => buildRecap(state, today), [state, today]);
   const month = useMemo(() => habits
     .map(h => ({ h, rate: monthRate(state, h, today) }))
     .sort((a, b) => b.rate - a.rate), [habits, state, today]);
@@ -117,6 +120,9 @@ export default function Progress() {
           )}
         </Card>
 
+        {recap && recap.cards.length ? (
+          <View style={{ marginTop: 16, marginHorizontal: 20 }}><RecapEntry recap={recap} title="Weekly recap" /></View>
+        ) : null}
         <Txt size={20} w={900} ls={-0.3} style={{ paddingTop: 18, paddingHorizontal: 20, paddingBottom: 8 }}>This month</Txt>
         <Card edge={p.line} bg={p.surface} outerStyle={{ marginHorizontal: 20 }} style={{ paddingVertical: 2, paddingHorizontal: 14 }}>
           {month.map(({ h, rate }, i) => {

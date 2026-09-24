@@ -9,6 +9,7 @@ export const EMPTY_STATE: State = {
   logs: {},
   shielded: [],
   dismissedSlips: [],
+  recapSeen: [],
   profile: { name: '', since: null },
   settings: { reminders: true, theme: 'system', notificationsAsked: false },
 };
