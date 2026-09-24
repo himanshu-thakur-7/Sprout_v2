@@ -123,7 +123,7 @@ function AddHabitSheet({ visible, onClose, draft: s, setDraft, editing }: {
           <TextInput
             value={s.name} onChangeText={onName} placeholder="Name your habit" placeholderTextColor={p.tertiary}
             autoFocus={!editing} returnKeyType="done" maxLength={28} selectionColor={a.base} cursorColor={a.base}
-            style={{ flex: 1, minWidth: 0, fontFamily: FONT[900], fontSize: 28, letterSpacing: -0.5, color: p.ink, padding: 0 }}
+            style={{ flex: 1, minWidth: 0, fontFamily: FONT[900], fontSize: 28, letterSpacing: -0.5, color: p.ink, padding: 0 , outlineWidth: 0 }}
           />
         </View>
       </View>

@@ -23,6 +23,8 @@ export default function You() {
   const insets = useSafeAreaInsets();
   const { state, today, setSettings } = useStore();
   const [account, setAccount] = useState(false);
+  const [accountKey, setAccountKey] = useState(0);
+  const openAccount = () => { setAccountKey(k => k + 1); setAccount(true); };
 
   const perfect = useMemo(() => perfectDayCount(state, today), [state, today]);
   const shields = shieldInfo(state, perfect);
@@ -53,7 +55,7 @@ export default function You() {
   const rows: { icon: IconName; accent: keyof typeof ACCENTS; l: string; v: string; on: () => void }[] = [
     { icon: 'bell', accent: 'sunflower', l: 'Reminders', v: state.settings.reminders ? 'On' : 'Off', on: toggleReminders },
     { icon: 'sun', accent: 'sky', l: 'Theme', v: THEMES.find(([k]) => k === state.settings.theme)?.[1] ?? 'Match system', on: cycleTheme },
-    { icon: 'person', accent: 'leaf', l: 'Account', v: 'On this phone', on: () => setAccount(true) },
+    { icon: 'person', accent: 'leaf', l: 'Account', v: 'On this phone', on: openAccount },
   ];
 
   const stat = (icon: IconName, c: string, v: string, l: string, ink: string) => (
@@ -67,7 +69,7 @@ export default function You() {
   return (
     <View style={{ flex: 1, backgroundColor: p.bg }}>
       <ScrollView contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 40 }}>
-        <Pressable onPress={() => setAccount(true)} style={{ alignItems: 'center', paddingTop: 22 }} accessibilityRole="button" accessibilityLabel="Edit your name">
+        <Pressable onPress={openAccount} style={{ alignItems: 'center', paddingTop: 22 }} accessibilityRole="button" accessibilityLabel="Edit your name">
           <View style={{ paddingBottom: 4 }}>
             <View style={{ position: 'absolute', left: 0, right: 0, top: 4, bottom: 0, borderRadius: 48, backgroundColor: GREEN.edge }} />
             <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: accentFor('leaf', p).tint, alignItems: 'center', justifyContent: 'center' }}>
@@ -107,7 +109,7 @@ export default function You() {
           })}
         </Card>
       </ScrollView>
-      <AccountSheet visible={account} onClose={() => setAccount(false)} />
+      <AccountSheet key={accountKey} visible={account} onClose={() => setAccount(false)} />
     </View>
   );
 }
@@ -127,7 +129,7 @@ function AccountSheet({ visible, onClose }: { visible: boolean; onClose: () => v
       <Handle />
       <Txt size={24} w={800} ls={-0.3}>What should Pip call you?</Txt>
       <TextInput value={draft} onChangeText={setDraft} placeholder="Your name" placeholderTextColor={p.tertiary} maxLength={24} autoFocus
-        style={{ fontFamily: FONT[800], fontSize: 20, color: p.ink, backgroundColor: p.bg, borderRadius: 18, paddingHorizontal: 16, height: 52 }} />
+        style={{ fontFamily: FONT[800], fontSize: 20, color: p.ink, backgroundColor: p.bg, borderRadius: 18, paddingHorizontal: 16, height: 52 , outlineWidth: 0 }} />
       <Txt size={14} w={400} color={p.secondary} lh={1.4}>Accounts and sync are on the way. For now everything lives on this phone.</Txt>
       <Button label="Save" onPress={() => { setName(draft.trim()); onClose(); }} />
       <Pressable onPress={startOver} style={{ alignSelf: 'center', paddingVertical: 8, marginBottom: 8 }} accessibilityRole="button">

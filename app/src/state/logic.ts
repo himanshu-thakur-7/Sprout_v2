@@ -162,18 +162,18 @@ export function monthDays(year: number, month: number): DayKey[] {
   return Array.from({ length: n }, (_, i) => dayKey(new Date(year, month, i + 1)));
 }
 
-/** Share of due days (or weeks) hit this month so far. Unfinished today isn't held against it. */
-export function monthRate(s: State, h: Habit, today: DayKey): number {
+/** Share of due days (or weeks) hit this month so far, or null when nothing can be judged yet. Unfinished today isn't held against it. */
+export function monthRate(s: State, h: Habit, today: DayKey): number | null {
   const t = parseDay(today);
   const days = monthDays(t.getFullYear(), t.getMonth()).filter(d => d <= today && d >= h.createdAt);
   if (isWeekly(h)) {
     const weeks = [...new Set(days.map(weekStart))];
     const judged = weeks.filter(w => addDays(w, 6) < today || weekMet(s, h, w));
-    if (!judged.length) return 1;
+    if (!judged.length) return null;
     return judged.filter(w => weekMet(s, h, w) || isShielded(s, h, w)).length / judged.length;
   }
   const judged = days.filter(d => isPlannedDay(h, d) && (d < today || isDone(s, h, d)));
-  if (!judged.length) return 1;
+  if (!judged.length) return null;
   return judged.filter(d => isDone(s, h, d) || isShielded(s, h, d)).length / judged.length;
 }
 

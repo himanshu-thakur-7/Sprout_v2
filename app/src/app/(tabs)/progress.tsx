@@ -44,7 +44,7 @@ export default function Progress() {
 
   const recap = useMemo(() => buildRecap(state, today), [state, today]);
   const month = useMemo(() => habits
-    .map(h => ({ h, rate: monthRate(state, h, today) }))
+    .map(h => { const r = monthRate(state, h, today); return { h, rate: r ?? 0, fresh: r == null }; })
     .sort((a, b) => b.rate - a.rate), [habits, state, today]);
 
   return (
@@ -125,7 +125,7 @@ export default function Progress() {
         ) : null}
         <Txt size={20} w={900} ls={-0.3} style={{ paddingTop: 18, paddingHorizontal: 20, paddingBottom: 8 }}>This month</Txt>
         <Card edge={p.line} bg={p.surface} outerStyle={{ marginHorizontal: 20 }} style={{ paddingVertical: 2, paddingHorizontal: 14 }}>
-          {month.map(({ h, rate }, i) => {
+          {month.map(({ h, rate, fresh }, i) => {
             const a = accentFor(h.color, p);
             const pct = Math.round(rate * 100);
             return (
@@ -138,7 +138,7 @@ export default function Progress() {
                     <View style={{ height: '100%', width: `${pct}%`, borderRadius: 4, backgroundColor: a.base }} />
                   </View>
                 </View>
-                <Txt size={15} w={900} color={a.ink} align="right" style={{ width: 44 }}>{`${pct}%`}</Txt>
+                <Txt size={15} w={900} color={fresh ? p.tertiary : a.ink} align="right" style={{ width: 44 }}>{fresh ? 'New' : `${pct}%`}</Txt>
               </Pressable>
             );
           })}

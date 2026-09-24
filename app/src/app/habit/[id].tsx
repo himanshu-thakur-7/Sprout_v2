@@ -61,11 +61,11 @@ function Detail({ h }: { h: Habit }) {
     ring = <Ring size={26} stroke={4.5} progress={0} color={a.base} track={a.tint} />;
   }
 
-  const rate = Math.round(monthRate(state, h, today) * 100);
+  const rate = monthRate(state, h, today);
   const usual = usualTime(state, h);
   const total = totalDone(state, h);
   const stats: { icon: IconName; tint: string; c: string; v: string; l: string }[] = [
-    { icon: 'check', tint: accentFor('leaf', p).tint, c: GREEN.edge, v: `${rate}%`, l: weekly ? 'weekly goal hit' : 'this month' },
+    { icon: 'check', tint: accentFor('leaf', p).tint, c: GREEN.edge, v: rate == null ? '—' : `${Math.round(rate * 100)}%`, l: weekly ? 'weekly goal hit' : 'this month' },
     { icon: h.icon, tint: a.tint, c: a.base, v: String(total), l: sch.kind === 'thru' ? `${h.unit ?? 'times'} total` : 'times done' },
     { icon: 'clock', tint: accentFor('lavender', p).tint, c: ACCENTS.lavender.edge, v: usual != null ? clockLabel(usual) : '—', l: 'usually' },
   ];
@@ -87,7 +87,7 @@ function Detail({ h }: { h: Habit }) {
               <Icon n="flame" c={hc} c2={a.base} s={36} />
               <Txt size={60} w={900} ls={-2} color={hc} style={{ lineHeight: 64 }}>{u(cur)}</Txt>
               <View style={{ marginTop: 10, paddingVertical: 5, paddingHorizontal: 14, borderRadius: 14, backgroundColor: light ? 'rgba(255,255,255,0.55)' : a.edge }}>
-                <Txt size={14} w={800} color={hc}>{cur > 0 && cur >= best ? 'Your best yet ✦' : `Best: ${u(best)}`}</Txt>
+                <Txt size={14} w={800} color={hc}>{best === 0 ? 'Just planted 🌱' : cur > 0 && cur >= best ? 'Your best yet ✦' : `Best: ${u(best)}`}</Txt>
               </View>
             </View>
             <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Back" hitSlop={8}
@@ -172,7 +172,7 @@ function MonthCalendar({ h }: { h: Habit }) {
   const weekPill = (row: (DayKey | null)[]): Cell => {
     const any = row.find(Boolean) as DayKey;
     const ws = weekStart(any);
-    if (ws > today) return { t: '', bg: 'transparent', c: p.secondary };
+    if (ws > today || addDays(ws, 6) < h.createdAt) return { t: '', bg: 'transparent', c: p.secondary };
     const n = weekCount(state, h, ws);
     if (n >= per) return { t: `${per}/${per} ✓`, bg: accentFor('leaf', p).tint, c: p.dark ? GREEN.darkHeadline : '#2F7A48', fs: 13 };
     if (addDays(ws, 6) >= today) return { t: `${n}/${per}`, bg: a.tint, c: a.ink, fs: 13 };
