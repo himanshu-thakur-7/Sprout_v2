@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div ref="{{ rootRef }}" style="position:relative;width:393px;height:852px;overflow:hidden;background:{{ bg }};font-family:Nunito,sans-serif;color:{{ ink }}">
+<div style="position:absolute;left:-100px;right:-100px;top:{{ hillTop }};height:480px;border-radius:50%;background:{{ hill }}"></div>
+<div style="position:relative;display:flex;flex-direction:column">
+<dc-import name="StatusBar" time="{{ time }}" dark="{{ dark }}" hint-size="393px,54px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:44px">
+<div style="display:flex;align-items:center;gap:6px"><sc-if value="{{ eve }}"><dc-import name="Icon" n="moon" c="#6D7E93" s="14" hint-size="14px,14px"></dc-import></sc-if><div style="font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;color:{{ dateC }}">{{ dateLabel }}</div></div>
+<sc-if value="{{ showBadge }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:24px;background:{{ surf }};box-shadow:0 3px 0 {{ line }}"><div style="font-size:17px;font-weight:900;letter-spacing:-.3px;color:{{ ink }}">{{ badge }}</div>{{ badgeRing }}</div></sc-if>
+</div>
+<div style="position:relative;height:{{ zoneH }}">
+<div style="position:absolute;left:50%;top:0;transform:translateX(-50%)"><dc-import name="Pip" mood="{{ mood }}" size="{{ pipSize }}" hint-size="120px,144px"></dc-import></div>
+<sc-if value="{{ bubble }}"><div style="position:absolute;left:258px;top:20px;max-width:116px;padding:8px 12px;border-radius:16px 16px 16px 4px;background:{{ surf }};box-shadow:0 3px 0 {{ line }};font-size:13px;font-weight:700;line-height:1.3;color:{{ ink }}">{{ bubble }}</div></sc-if>
+</div>
+<sc-if value="{{ hasCards }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:16px;padding:0 20px">
+<sc-for list="{{ habits }}" as="hb" hint-placeholder-count="4"><dc-import name="HabitCard" h="{{ hb }}" dark="{{ dark }}" hint-size="100%,76px"></dc-import></sc-for>
+</div></sc-if>
+<sc-if value="{{ showRest }}"><div style="margin:18px 20px 0;display:flex;align-items:center;gap:12px;padding:9px 14px;border-radius:18px;border:1.5px dashed {{ restLine }}">
+<div style="width:32px;height:32px;border-radius:16px;background:{{ restTint }};display:flex;align-items:center;justify-content:center;opacity:.8"><dc-import name="Icon" n="shoe" c="#2EC4B6" s="18" hint-size="18px,18px"></dc-import></div>
+<div style="flex:1;font-size:15px;font-weight:700;color:{{ sec }}">Walk · Rest day</div>
+<div style="display:flex;align-items:center;gap:2px;font-size:15px;font-weight:900;color:#1A978A;opacity:.8"><dc-import name="Icon" n="flame" c="#2EC4B6" s="16" hint-size="16px,16px"></dc-import><span>3</span><span style="font-size:10px;font-weight:800">wk</span></div>
+<dc-import name="Icon" n="chevD" c="#B5B1A8" s="18" hint-size="18px,18px"></dc-import>
+</div></sc-if>
+<sc-if value="{{ empty }}"><div style="margin:4px 20px 0;padding:26px 22px 22px;border-radius:24px;background:#FFFFFF;box-shadow:0 3px 0 #ECE4D6;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+<div style="font-size:24px;font-weight:800;color:#1F2A24;letter-spacing:-.3px">Nothing planted yet</div>
+<div style="font-size:15px;color:#6B6F66;max-width:270px;line-height:1.45;text-wrap:pretty">Start with one tiny habit. I'll be here cheering for every single one.</div>
+<div style="margin-top:14px;align-self:stretch;height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C"><dc-import name="Icon" n="plus" c="#FFFFFF" s="22" hint-size="22px,22px"></dc-import>Plant your first habit</div>
+<div style="margin-top:6px;font-size:13px;font-weight:700;color:#B5B1A8">Two minutes a day is plenty.</div>
+</div></sc-if>
+</div>
+<dc-import name="BottomNav" active="today" dark="{{ dark }}" style="position:absolute;left:0;right:0;bottom:0" hint-size="393px,84px"></dc-import>
+{{ confetti }}
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:393,&quot;height&quot;:852},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mid&quot;,&quot;evening&quot;,&quot;empty&quot;,&quot;dark&quot;,&quot;friday&quot;],&quot;default&quot;:&quot;mid&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const PAL = { sky: '#4DA8F0', tangerine: '#FF9F43', sunflower: '#FFC83D', lavender: '#A78BFA', teal: '#2EC4B6' };
+class Component extends DCLogic {
+  state = { bursts: [] };
+  rootRef = React.createRef();
+  burst(e, color) {
+    const root = this.rootRef.current, t = e && e.currentTarget; if (!root || !t) return;
+    const rr = root.getBoundingClientRect(), k = rr.width / 393, cr = t.getBoundingClientRect();
+    const b = { id: Date.now() + Math.random(), x: (cr.right - rr.left) / k - 104, y: (cr.top - rr.top) / k + cr.height / k / 2 - 2, color };
+    this.setState(s => ({ bursts: [...s.bursts, b] }));
+    setTimeout(() => this.setState(s => ({ bursts: s.bursts.filter(x => x.id !== b.id) })), 1000);
+  }
+  renderVals() {
+    const h = React.createElement, s = this.state, v = this.props.variant || 'mid';
+    const dark = v === 'dark', eve = v === 'evening', empty = v === 'empty', fri = v === 'friday';
+    const w = s.w ?? (eve ? 6 : fri ? 0 : 4), gym = s.gym ?? false, read = s.read ?? !fri, med = s.med ?? false, walk = s.walk ?? false;
+    const g = 2 + (gym ? 1 : 0);
+    const tap = (id, color) => e => {
+      if (id === 'w') { const nw = w >= 8 ? 7 : w + 1; this.setState({ w: nw }); if (nw === 8) this.burst(e, color); return; }
+      const cur = { gym, read, med, walk }[id]; this.setState({ [id]: !cur }); if (!cur) this.burst(e, color);
+    };
+    const habits = empty ? [] : [
+      { title: 'Drink water', sub: `${w} of 8 glasses`, color: 'sky', icon: 'drop', kind: 'count', state: w >= 8 ? 'done' : 'progress', progress: w / 8, streak: (fri ? 12 : 11) + (w >= 8 ? 1 : 0), tap: tap('w', PAL.sky), done: w >= 8 },
+      { title: 'Gym', sub: `${g} of 4 this week`, color: 'tangerine', icon: 'dumbbell', kind: 'weekly', state: gym ? 'done' : 'progress', progress: g / 4, streak: 8, unit: 'wk', tap: tap('gym', PAL.tangerine), done: gym },
+      { title: 'Read', sub: read ? 'Done' : 'Tonight, 9 pm', color: 'sunflower', icon: 'book', kind: 'daily', state: read ? 'done' : 'due', streak: (fri ? 24 : 23) + (read ? 1 : 0), tap: tap('read', PAL.sunflower), done: read },
+      { title: 'Meditate', sub: '10 minutes', color: 'lavender', icon: 'lotus', kind: 'daily', state: med ? 'done' : 'due', streak: fri ? (med ? 1 : 0) : (med ? 6 : 5), tap: tap('med', PAL.lavender), done: med }
+    ];
+    if (fri) habits.push({ title: 'Walk', sub: `${2 + (walk ? 1 : 0)} of 5 this week`, color: 'teal', icon: 'shoe', kind: 'weekly', state: walk ? 'done' : 'progress', progress: (2 + (walk ? 1 : 0)) / 5, streak: 3, unit: 'wk', tap: tap('walk', PAL.teal), done: walk });
+    const total = habits.length, doneN = habits.filter(x => x.done).length, all = total > 0 && doneN === total;
+    let mood = 'expectant';
+    if (!empty) { if ((eve || fri) && !all) mood = 'droopy'; else if (all) mood = 'cheering'; else if (doneN > 0) mood = 'happy'; }
+    const B = ['Morning! What’s first?', 'One down. Nice and easy.', 'Halfway there. Look at you.', 'One to go!', 'Perfect day!'];
+    const bubble = empty ? 'Hi! I’m Pip.' : fri ? '' : eve && !all ? 'Still time for a couple. No rush.' : all ? 'Perfect day!' : B[doneN];
+    const T = dark ? { bg: '#131915', surf: '#1D2520', ink: '#F2EEE6', sec: '#A3A89E', line: '#2A332D', hill: '#1A221D', dateC: '#7FD49C', restLine: '#2A332D', restTint: 'color-mix(in oklab, #2EC4B6 22%, #1D2520)' }
+      : { bg: eve ? 'linear-gradient(180deg,#D3DAE3 0%,#E2E2E1 24%,#F4EFE7 44%,#FBF7F0 60%)' : '#FBF7F0', surf: '#FFFFFF', ink: '#1F2A24', sec: '#6B6F66', line: '#ECE4D6', hill: eve ? '#ECE3D5' : '#F1E7D6', dateC: eve ? '#4D5F74' : '#2F6B45', restLine: '#E3D8C4', restTint: '#DDF6F3' };
+    const R = 11, C = 2 * Math.PI * R;
+    const badgeRing = all
+      ? h('div', { style: { width: 30, height: 30, borderRadius: 15, background: '#58C27D', display: 'flex', alignItems: 'center', justifyContent: 'center' } }, h('svg', { viewBox: '0 0 24 24', width: 18, height: 18 }, h('path', { d: 'M6.5 12.5l3.8 3.7 7.2-7.7', fill: 'none', stroke: '#fff', strokeWidth: 3.4, strokeLinecap: 'round', strokeLinejoin: 'round' })))
+      : h('svg', { width: 30, height: 30, viewBox: '0 0 30 30' }, h('circle', { key: 1, cx: 15, cy: 15, r: R, fill: 'none', stroke: T.line, strokeWidth: 4.5 }), doneN > 0 ? h('circle', { key: 2, cx: 15, cy: 15, r: R, fill: 'none', stroke: '#58C27D', strokeWidth: 4.5, strokeLinecap: 'round', strokeDasharray: `${C * doneN / total} ${C}`, transform: 'rotate(-90 15 15)', style: { transition: 'stroke-dasharray 500ms cubic-bezier(.34,1.56,.64,1)' } }) : null);
+    const confetti = h('div', { style: { position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20 } }, s.bursts.map(b => h('div', { key: b.id, style: { position: 'absolute', left: b.x, top: b.y } },
+      Array.from({ length: 18 }, (_, i) => { const a = i / 18 * Math.PI * 2 + (i % 3) * .2, dist = 40 + (i * 37 % 34), sq = i % 3 === 0; return h('div', { key: i, style: { position: 'absolute', left: -4, top: -4, width: sq ? 8 : 6, height: sq ? 8 : 11, borderRadius: sq ? 4 : 2, background: [b.color, '#58C27D', '#FFC83D', b.color][i % 4], '--dx': Math.cos(a) * dist + 'px', '--dy': Math.sin(a) * dist + 'px', '--r': (i * 47 % 360) + 'deg', animation: 'spBurst 800ms cubic-bezier(.15,.8,.3,1) forwards' } }); }))));
+    return {
+      rootRef: this.rootRef, ...T, dark, eve, empty, habits, mood, bubble, confetti, badgeRing,
+      time: this.props.time || (eve ? '8:40' : fri ? '8:02' : '12:30'),
+      dateLabel: fri ? 'Friday, Sep 25' : 'Thursday, Sep 24',
+      badge: `${doneN}/${total}`, showBadge: !empty, hasCards: !empty, showRest: !empty && !fri,
+      zoneH: empty ? '212px' : '168px', pipSize: empty ? 150 : 120, hillTop: empty ? '250px' : '200px'
+    };
+  }
+}
+</script>
+</body>
+</html>

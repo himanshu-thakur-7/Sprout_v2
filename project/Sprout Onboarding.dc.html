@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>body{margin:0;background:#E8E2D6;font-family:Nunito,sans-serif;-webkit-font-smoothing:antialiased}a{color:#2F6B45;font-weight:800;text-decoration:none;white-space:nowrap}a:hover{color:#3E9A5C;text-decoration:underline}</style></helmet>
+<div style="padding:48px 56px 96px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px"><a href="Sprout%20Design%20System.dc.html">Design system</a><a href="Sprout%20Onboarding.dc.html">Onboarding</a><a href="Sprout%20Today.dc.html">Today</a><a href="Sprout%20Habits.dc.html">Habits &amp; progress</a><a href="Sprout%20Recap%20and%20System.dc.html">Recap &amp; system</a></div>
+<div style="font-size:48px;font-weight:900;color:#1F2A24;letter-spacing:-1.2px">Sprout · Onboarding</div>
+<div style="font-size:16px;line-height:1.5;color:#6B6F66;max-width:720px;text-wrap:pretty">Four steps from hello to a first habit. Screens 02 and 03 work: tap tiles to pick habits, and use the steppers and day toggles to set a rhythm.</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
+
+<div data-screen-label="01 Welcome" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">01</span>Welcome</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;background:#FBF7F0;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45);color:#1F2A24">
+<div style="position:absolute;left:-120px;right:-120px;top:560px;height:520px;border-radius:50%;background:#F1E7D6"></div>
+<div style="position:relative;height:100%;display:flex;flex-direction:column">
+<dc-import name="StatusBar" hint-size="393px,54px"></dc-import>
+<div style="padding:70px 32px 0;text-align:center;font-size:38px;font-weight:900;letter-spacing:-1px;line-height:1.08;text-wrap:balance">Hey. Let's build something small.</div>
+<div style="padding:14px 40px 0;text-align:center;font-size:16px;color:#6B6F66;line-height:1.45">Tiny habits, honest streaks, and one small seed rooting for you.</div>
+<div style="position:relative;flex:1;display:flex;justify-content:center;align-items:flex-end;padding-bottom:6px">
+<div style="position:absolute;left:84px;top:48px"><dc-import name="Icon" n="sparkle" c="#FFC83D" s="20" hint-size="20px,20px"></dc-import></div>
+<div style="position:absolute;right:78px;top:96px"><dc-import name="Icon" n="sparkle" c="#FFC83D" s="14" hint-size="14px,14px"></dc-import></div>
+<dc-import name="Pip" mood="waving" size="200" hint-size="200px,240px"></dc-import>
+</div>
+<div style="padding:18px 20px 40px;display:flex;flex-direction:column;align-items:center;gap:18px">
+<div style="display:flex;gap:6px"><div style="width:24px;height:8px;border-radius:4px;background:#58C27D"></div><div style="width:8px;height:8px;border-radius:4px;background:#DCCFB8"></div><div style="width:8px;height:8px;border-radius:4px;background:#DCCFB8"></div></div>
+<div style="align-self:stretch;height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C">Let's go.</div>
+<div style="font-size:15px;font-weight:800;color:#2F6B45">I already have an account</div>
+</div>
+</div>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66">Pip waves once on arrival (500 ms spring), then breathes gently while idle.</div>
+</div>
+
+<div data-screen-label="02 Pick habits" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">02</span>Pick habits · interactive</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;background:#FBF7F0;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45);color:#1F2A24">
+<dc-import name="StatusBar" hint-size="393px,54px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 20px 0;height:44px"><dc-import name="Icon" n="arrowL" c="#6B6F66" s="24" hint-size="24px,24px"></dc-import><div style="display:flex;gap:6px"><div style="width:8px;height:8px;border-radius:4px;background:#DCCFB8"></div><div style="width:24px;height:8px;border-radius:4px;background:#58C27D"></div><div style="width:8px;height:8px;border-radius:4px;background:#DCCFB8"></div></div><div style="width:24px"></div></div>
+<div style="padding:18px 20px 0;font-size:32px;font-weight:900;letter-spacing:-.8px">Pick a few to start</div>
+<div style="padding:4px 20px 0;font-size:16px;color:#6B6F66">3 is plenty.</div>
+<div style="padding:22px 20px 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 12px">
+<sc-for list="{{ tiles }}" as="t" hint-placeholder-count="7"><div onClick="{{ t.tog }}" style="position:relative;height:104px;border-radius:22px;background:{{ t.tint }};border:2.5px solid {{ t.bc }};box-shadow:0 4px 0 {{ t.edge }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;transition:transform 140ms cubic-bezier(.34,1.56,.64,1),box-shadow 140ms,border-color 140ms" style-active="transform:translateY(4px);box-shadow:none"><dc-import name="Icon" n="{{ t.icon }}" c="{{ t.base }}" s="36" hint-size="36px,36px"></dc-import><div style="font-size:15px;font-weight:800;color:#1F2A24">{{ t.label }}</div><sc-if value="{{ t.on }}"><div style="position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:12px;background:#fff;box-shadow:0 2px 0 {{ t.edge }};display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#58C27D" s="16" hint-size="16px,16px"></dc-import></div></sc-if></div></sc-for>
+<div style="height:104px;border-radius:22px;border:2.5px dashed #D5C8B2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;color:#6B6F66;cursor:pointer"><dc-import name="Icon" n="plus" c="#9A968D" s="28" hint-size="28px,28px"></dc-import><div style="font-size:15px;font-weight:800">Custom</div></div>
+</div>
+<div style="position:absolute;left:146px;top:630px"><dc-import name="Pip" mood="expectant" size="100" shadow="false" hint-size="100px,120px"></dc-import></div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:136px;background:#FBF7F0;padding:28px 20px 0;box-sizing:border-box;display:flex;flex-direction:column;gap:10px">
+<div style="height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C">Continue</div>
+<div style="text-align:center;font-size:13px;font-weight:700;color:#9A968D">{{ pickedLabel }}</div>
+</div>
+<div style="position:absolute;left:165px;top:708px;width:22px;height:16px;border-radius:50%;background:#EBD9BB"></div>
+<div style="position:absolute;left:207px;top:708px;width:22px;height:16px;border-radius:50%;background:#EBD9BB"></div>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66">Tiles use each habit's tint with its dark edge. Selected tiles get a colored border and a white check badge, and pop 1.06× when picked.</div>
+</div>
+
+<div data-screen-label="03 Set your rhythm" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">03</span>Set your rhythm · interactive</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;background:#FBF7F0;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45);color:#1F2A24">
+<dc-import name="StatusBar" hint-size="393px,54px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 20px 0;height:44px"><dc-import name="Icon" n="arrowL" c="#6B6F66" s="24" hint-size="24px,24px"></dc-import><div style="display:flex;gap:6px"><div style="width:8px;height:8px;border-radius:4px;background:#DCCFB8"></div><div style="width:8px;height:8px;border-radius:4px;background:#DCCFB8"></div><div style="width:24px;height:8px;border-radius:4px;background:#58C27D"></div></div><div style="width:24px"></div></div>
+<div style="padding:18px 20px 0;font-size:32px;font-weight:900;letter-spacing:-.8px">Set your rhythm</div>
+<div style="padding:4px 20px 0;font-size:16px;color:#6B6F66">Small and steady. You can change this anytime.</div>
+<div style="padding:20px 20px 0;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border-radius:24px;box-shadow:0 4px 0 #3A8BD1;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:20px;background:#E3F0FC;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="drop" c="#4DA8F0" s="22" hint-size="22px,22px"></dc-import></div><div style="flex:1;font-size:18px;font-weight:800">Drink water</div><div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#2F86D0;text-transform:uppercase">Throughout the day</div></div>
+<div style="position:relative;height:18px;display:flex;align-items:center;justify-content:space-between"><div style="position:absolute;left:6px;right:6px;top:8px;height:2px;background:#E3F0FC"></div><sc-for list="{{ dots }}" as="d"><div style="position:relative;width:{{ d.s }};height:{{ d.s }};border-radius:50%;background:#4DA8F0"></div></sc-for></div>
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:700;color:#6B6F66">8 am – 10 pm</div><div style="display:flex;align-items:center;gap:8px"><div onClick="{{ ivDown }}" style="width:32px;height:32px;border-radius:16px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="minus" c="#1F2A24" s="14" hint-size="14px,14px"></dc-import></div><div style="min-width:108px;text-align:center;font-size:14px;font-weight:800">{{ ivLabel }}</div><div onClick="{{ ivUp }}" style="width:32px;height:32px;border-radius:16px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="plus" c="#1F2A24" s="14" hint-size="14px,14px"></dc-import></div></div></div>
+</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 4px 0 #E0822A;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:20px;background:#FFEBD8;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="dumbbell" c="#FF9F43" s="22" hint-size="22px,22px"></dc-import></div><div style="flex:1;font-size:18px;font-weight:800">Gym</div><div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#D9731A;text-transform:uppercase">Times per week</div></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:18px"><div onClick="{{ perDown }}" style="width:40px;height:40px;border-radius:20px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="minus" c="#1F2A24" s="18" hint-size="18px,18px"></dc-import></div><div style="display:flex;align-items:baseline;gap:6px;min-width:130px;justify-content:center"><div style="font-size:40px;font-weight:900;letter-spacing:-1px;color:#D9731A;line-height:1">{{ per }}</div><div style="font-size:15px;font-weight:700;color:#6B6F66">times a week</div></div><div onClick="{{ perUp }}" style="width:40px;height:40px;border-radius:20px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="plus" c="#1F2A24" s="18" hint-size="18px,18px"></dc-import></div></div>
+<div style="text-align:center;font-size:13px;color:#6B6F66">Any days you like. Streak counts in weeks.</div>
+</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 4px 0 #E0AC22;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:20px;background:#FFF4D1;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="book" c="#FFC83D" s="22" hint-size="22px,22px"></dc-import></div><div style="flex:1;font-size:18px;font-weight:800">Read</div><div style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:14px;background:#FBF7F0;font-size:13px;font-weight:800;color:#1F2A24"><dc-import name="Icon" n="bell" c="#C28E0A" s="14" hint-size="14px,14px"></dc-import>9:00 pm</div></div>
+<div style="display:flex;justify-content:space-between"><sc-for list="{{ days }}" as="d"><div onClick="{{ d.tog }}" style="width:38px;height:38px;border-radius:19px;background:{{ d.bg }};box-shadow:{{ d.sh }};color:{{ d.c }};font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer">{{ d.l }}</div></sc-for></div>
+</div>
+</div>
+<div style="position:absolute;left:20px;right:20px;bottom:40px;height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C"><dc-import name="Icon" n="sprout" c="#FFFFFF" s="22" hint-size="22px,22px"></dc-import>Plant it</div>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66">One compact card per chosen habit, each showing only the control its schedule needs: a timeline, a stepper, or day toggles.</div>
+</div>
+
+<div data-screen-label="04 Notifications" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">04</span>Notification permission</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;background:#FBF7F0;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45);color:#1F2A24;display:flex;flex-direction:column">
+<dc-import name="StatusBar" hint-size="393px,54px"></dc-import>
+<div style="position:relative;height:340px;display:flex;justify-content:center;align-items:center;margin-top:30px">
+<div style="position:absolute;width:270px;height:270px;border-radius:50%;background:#FFF4D1"></div>
+<div style="position:absolute;width:200px;height:200px;border-radius:50%;background:#FFEDB8"></div>
+<div style="position:relative"><dc-import name="Pip" mood="happy" prop="bell" size="190" hint-size="190px,228px"></dc-import></div>
+</div>
+<div style="padding:20px 32px 0;text-align:center;font-size:34px;font-weight:900;letter-spacing:-.8px">Can I nudge you?</div>
+<div style="padding:12px 40px 0;text-align:center;font-size:16px;line-height:1.5;color:#6B6F66;text-wrap:pretty">One gentle reminder when a habit is due. Only for the ones you pick, and never more than you ask for.</div>
+<div style="margin:22px 28px 0;padding:12px 14px;border-radius:18px;background:#fff;box-shadow:0 3px 0 #ECE4D6;display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:9px;background:#E3F5E9;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="sprout" c="#58C27D" s="22" hint-size="22px,22px"></dc-import></div><div style="flex:1"><div style="font-size:14px;font-weight:800">Glass #5 time 💧</div><div style="font-size:13px;color:#6B6F66">Halfway there. Small sips count.</div></div><div style="font-size:12px;color:#B5B1A8;font-weight:700">now</div></div>
+<div style="flex:1"></div>
+<div style="padding:0 20px 40px;display:flex;flex-direction:column;gap:14px">
+<div style="height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C">Yes, nudge me</div>
+<div style="height:52px;border-radius:28px;background:#fff;border:2px solid #ECE4D6;box-shadow:0 4px 0 #ECE4D6;color:#1F2A24;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #ECE4D6">Maybe later</div>
+</div>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66">Shown before the iOS system prompt, so a "Maybe later" costs nothing. Pip rings the bell twice (2 × 300 ms wobble).</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PAL = { sky: ['#4DA8F0', '#3A8BD1', '#E3F0FC'], tangerine: ['#FF9F43', '#E0822A', '#FFEBD8'], sunflower: ['#FFC83D', '#E0AC22', '#FFF4D1'], lavender: ['#A78BFA', '#8B6FE0', '#EEE8FE'], teal: ['#2EC4B6', '#22A396', '#DDF6F3'], berry: ['#E056A0', '#C03E84', '#FBE3F0'], leaf: ['#58C27D', '#3E9A5C', '#E3F5E9'] };
+class Component extends DCLogic {
+  state = { picked: { water: 1, gym: 1, read: 1 }, days: [1, 1, 1, 1, 1, 1, 1], per: 4, iv: 2 };
+  renderVals() {
+    const s = this.state;
+    const T = [['water', 'Water', 'drop', 'sky'], ['gym', 'Gym', 'dumbbell', 'tangerine'], ['read', 'Read', 'book', 'sunflower'], ['meditate', 'Meditate', 'lotus', 'lavender'], ['walk', 'Walk', 'shoe', 'teal'], ['sleep', 'Sleep', 'moon', 'berry'], ['eat', 'Eat well', 'apple', 'leaf']];
+    const tiles = T.map(([id, label, icon, c]) => { const [b, e, t] = PAL[c], on = !!s.picked[id]; return { label, icon, base: b, tint: t, edge: e, on, bc: on ? b : 'transparent', tog: () => this.setState(st => ({ picked: { ...st.picked, [id]: !st.picked[id] } })) }; });
+    const n = Object.values(s.picked).filter(Boolean).length;
+    const dn = Math.floor(14 / s.iv) + 1;
+    return {
+      tiles, pickedLabel: n === 0 ? 'Pick at least one' : n > 4 ? `${n} picked · maybe start with fewer?` : `${n} picked`,
+      dots: Array.from({ length: dn }, (_, i) => ({ s: i === 0 || i === dn - 1 ? '16px' : '9px' })),
+      ivLabel: `Every ${s.iv} hour${s.iv > 1 ? 's' : ''}`, ivDown: () => this.setState(st => ({ iv: Math.max(1, st.iv - 1) })), ivUp: () => this.setState(st => ({ iv: Math.min(4, st.iv + 1) })),
+      per: s.per, perDown: () => this.setState(st => ({ per: Math.max(1, st.per - 1) })), perUp: () => this.setState(st => ({ per: Math.min(6, st.per + 1) })),
+      days: 'MTWTFSS'.split('').map((l, i) => { const on = !!s.days[i]; return { l, bg: on ? '#FFC83D' : '#F1E7D6', c: on ? '#1F2A24' : '#6B6F66', sh: on ? '0 3px 0 #E0AC22' : 'none', tog: () => this.setState(st => { const d = [...st.days]; d[i] = d[i] ? 0 : 1; return { days: d }; }) }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+{{ svg }}
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:200,&quot;height&quot;:240},&quot;mood&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;expectant&quot;,&quot;happy&quot;,&quot;cheering&quot;,&quot;proud&quot;,&quot;sleepy&quot;,&quot;droopy&quot;,&quot;relieved&quot;,&quot;waving&quot;],&quot;default&quot;:&quot;expectant&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;prop&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;book&quot;,&quot;dumbbells&quot;,&quot;meditate&quot;,&quot;sneakers&quot;,&quot;trophy&quot;,&quot;bell&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;size&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:160,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const h = React.createElement;
+    const mood = this.props.mood || 'expectant';
+    let prop = this.props.prop || 'none';
+    if (mood === 'proud' && prop === 'none') prop = 'trophy';
+    const only = this.props.only || '';
+    const size = +(this.props.size || 160);
+    const shadowOn = !(this.props.shadow === false || this.props.shadow === 'false');
+    const INK = '#1F3A2A', BODY = '#F3E6CF', SHADE = '#EAD7B7', ARM = '#EBD9BB', FOOT = '#E6D1AD', LEAF = '#58C27D', STEM = '#4AAE6C', BLUSH = '#F7A8A0';
+    const MOODS = {
+      expectant: { eyes: 'up', mouth: 'smile', leaves: 'up', arms: 'down', by: 0 },
+      happy: { eyes: 'open', mouth: 'grin', leaves: 'perky', arms: 'out', by: -8 },
+      cheering: { eyes: 'open', mouth: 'open', leaves: 'perky', arms: 'up', by: -12 },
+      proud: { eyes: 'open', mouth: 'grin', leaves: 'up', arms: 'front', by: 0 },
+      sleepy: { eyes: 'closed', mouth: 'tiny', leaves: 'tilt', arms: 'down', by: 2, zz: 1 },
+      droopy: { eyes: 'half', mouth: 'frown', leaves: 'wilt', arms: 'slump', by: 5, sy: .95 },
+      relieved: { eyes: 'happy', mouth: 'grin', leaves: 'perky', arms: 'out', by: -4 },
+      waving: { eyes: 'open', mouth: 'grin', leaves: 'up', arms: 'wave', by: 0 }
+    };
+    const PROPS = {
+      book: { arms: 'front', eyes: 'down', by: 0 },
+      dumbbells: { arms: 'up' },
+      meditate: { arms: 'lap', eyes: 'closed', mouth: 'smile', legs: 'cross', by: 0, leaves: 'up' },
+      sneakers: { arms: 'swing', legs: 'walk', by: 0 },
+      trophy: { arms: 'front' },
+      bell: { arms: 'front', by: 0 }
+    };
+    const c = Object.assign({}, MOODS[mood] || MOODS.expectant, PROPS[prop] || {});
+    const show = id => !only || only === id;
+    const part = (id, key, kids) => show(id) ? h('g', { key, 'data-part': id }, ...kids.filter(Boolean).map((k, i) => React.cloneElement(k, { key: i }))) : null;
+    const E = o => h('ellipse', o);
+    const A = (cx, cy, rot, rx, ry) => E({ cx, cy, rx: rx || 10, ry: ry || 16, fill: ARM, transform: `rotate(${rot} ${cx} ${cy})` });
+    const hand = (cx, cy) => h('circle', { cx, cy, r: 9.5, fill: ARM });
+    const S = (d, w, col) => h('path', { d, fill: 'none', stroke: col || INK, strokeWidth: w || 3.4, strokeLinecap: 'round', strokeLinejoin: 'round' });
+    const sneaker = (x, y, r) => h('g', { transform: `translate(${x} ${y}) rotate(${r})` },
+      E({ key: 1, cx: 0, cy: -9, rx: 8, ry: 9, fill: FOOT }),
+      h('path', { key: 2, d: 'M-14 4C-14 -4 -9 -8 -3 -8C1 -8 3 -5 7 -3C12 -1 16 0 16 4V5H-14Z', fill: '#2EC4B6' }),
+      h('rect', { key: 3, x: -15, y: 3.5, width: 32, height: 5.5, rx: 2.75, fill: '#FFFFFF' }),
+      h('path', { key: 4, d: 'M-3 -6L0 -2M2 -7L5 -3', fill: 'none', stroke: '#FFFFFF', strokeWidth: 1.6, strokeLinecap: 'round' }));
+    let feet = null, legs = null;
+    if (c.legs === 'walk') feet = part('feet', 'feet', [sneaker(80, 213, -6), sneaker(124, 207, 8)]);
+    else if (c.legs === 'cross') legs = part('feet', 'legs', [E({ cx: 80, cy: 204, rx: 38, ry: 15, fill: FOOT, transform: 'rotate(8 80 204)' }), E({ cx: 120, cy: 206, rx: 38, ry: 15, fill: ARM, transform: 'rotate(-8 120 206)' })]);
+    else feet = part('feet', 'feet', [E({ cx: 80, cy: 210, rx: 15, ry: 10, fill: FOOT }), E({ cx: 120, cy: 210, rx: 15, ry: 10, fill: FOOT })]);
+    const body = part('body', 'body', [
+      h('path', { d: 'M100 58C139 58 156 90 158 132C160 178 148 210 100 210C52 210 40 178 42 132C44 90 61 58 100 58Z', fill: BODY }),
+      h('path', { d: 'M43 158C45 192 62 210 100 210C138 210 155 192 157 158C146 186 124 194 100 194C76 194 54 186 43 158Z', fill: SHADE })]);
+    const LT = { up: [0, 0], perky: [-8, 8], tilt: [-38, 38], wilt: [-52, 52] }[c.leaves] || [0, 0];
+    const leaves = part('leaves', 'leaves', [
+      S(c.leaves === 'wilt' ? 'M100 60Q99 53 100 47' : 'M100 60V46', 5, STEM),
+      h('path', { d: 'M100 46C94 30 78 25 67 30C70 42 86 50 100 46Z', fill: LEAF, transform: `rotate(${LT[0]} 100 46)` }),
+      h('path', { d: 'M100 46C106 30 122 25 133 30C130 42 114 50 100 46Z', fill: LEAF, transform: `rotate(${LT[1]} 100 46)` })]);
+    const eye = cx => {
+      if (c.eyes === 'closed') return S(`M${cx - 10} 110Q${cx} 118 ${cx + 10} 110`, 3.6);
+      if (c.eyes === 'happy') return S(`M${cx - 10} 114Q${cx} 102 ${cx + 10} 114`, 3.6);
+      if (c.eyes === 'half') return h('g', null, h('path', { key: 1, d: `M${cx - 10} 110A10 10 0 0 0 ${cx + 10} 110Z`, fill: INK }), h('path', { key: 2, d: `M${cx - 11.5} 109.5H${cx + 11.5}`, stroke: INK, strokeWidth: 3.2, strokeLinecap: 'round' }), h('circle', { key: 3, cx: cx + 3, cy: 114, r: 2.2, fill: '#fff' }));
+      const dy = c.eyes === 'up' ? -3 : c.eyes === 'down' ? 3 : 0;
+      return h('g', null, h('circle', { key: 1, cx, cy: 110 + dy, r: 10.5, fill: INK }), h('circle', { key: 2, cx: cx + 3.6, cy: 106 + dy, r: 3.6, fill: '#fff' }), h('circle', { key: 3, cx: cx - 3.5, cy: 114 + dy, r: 1.5, fill: '#fff', opacity: .7 }));
+    };
+    const eyes = part('eyes', 'eyes', [eye(80), eye(120)]);
+    const blush = part('blush', 'blush', [E({ cx: 63, cy: 126, rx: 9.5, ry: 6, fill: BLUSH, opacity: .8 }), E({ cx: 137, cy: 126, rx: 9.5, ry: 6, fill: BLUSH, opacity: .8 })]);
+    const MO = {
+      smile: [S('M93 127Q100 133.5 107 127', 3.4)],
+      grin: [S('M89 125Q100 139 111 125', 3.6)],
+      open: [h('path', { d: 'M88 124Q100 127 112 124Q111 143 100 143Q89 143 88 124Z', fill: INK }), E({ cx: 100, cy: 137.5, rx: 6.5, ry: 4, fill: '#F08C86' })],
+      frown: [S('M93 134Q100 128 107 134', 3.2)],
+      tiny: [S('M96 130Q100 132.5 104 130', 3)]
+    };
+    const mouth = part('mouth', 'mouth', MO[c.mouth] || MO.smile);
+    const ARMS = {
+      down: [A(46, 152, 22), A(154, 152, -22)], out: [A(41, 146, 40), A(159, 146, -40)], slump: [A(49, 160, 10), A(151, 160, -10)],
+      up: [A(37, 100, -32), A(163, 100, 32)], wave: [A(46, 152, 22), A(163, 98, 28)], front: [A(52, 160, 38, 9, 13), A(148, 160, -38, 9, 13)],
+      lap: [A(80, 183, -62, 9, 14), A(120, 183, 62, 9, 14)], swing: [A(47, 150, 32), A(153, 150, -6)]
+    };
+    const arms = part('arms', 'arms', ARMS[c.arms] || ARMS.down);
+    let pr = null, hands = null;
+    if (prop === 'book') { pr = part('prop', 'prop', [h('path', { d: 'M100 160C90 154 78 153 66 156V188C78 185 90 186 100 192Z', fill: '#FFC83D' }), h('path', { d: 'M100 160C110 154 122 153 134 156V188C122 185 110 186 100 192Z', fill: '#FFD466' }), S('M100 160V192', 2.4, '#E0AC22')]); hands = part('arms', 'hands', [hand(66, 176), hand(134, 176)]); }
+    if (prop === 'trophy') { pr = part('prop', 'prop', [S('M83 150C71 150 71 166 85 166M117 150C129 150 129 166 115 166', 4, '#E0AC22'), h('path', { d: 'M82 145H118V156C118 170 110 177 100 177C90 177 82 170 82 156Z', fill: '#FFC83D' }), h('rect', { x: 95.5, y: 176, width: 9, height: 8, fill: '#E0AC22' }), h('rect', { x: 85, y: 183, width: 30, height: 8, rx: 3, fill: '#FFC83D' }), h('path', { d: 'M100 151L102.4 156L107.6 156.6L103.8 160L104.8 165.2L100 162.6L95.2 165.2L96.2 160L92.4 156.6L97.6 156Z', fill: '#FFF1B8' })]); hands = part('arms', 'hands', [hand(83, 186), hand(117, 186)]); }
+    if (prop === 'bell') { pr = part('prop', 'prop', [h('circle', { cx: 100, cy: 139, r: 4, fill: '#E0AC22' }), h('path', { d: 'M100 141C90 141 84 149 84 159V168L79 175H121L116 168V159C116 149 110 141 100 141Z', fill: '#FFC83D' }), h('circle', { cx: 100, cy: 180, r: 5, fill: '#E0AC22' })]); hands = part('arms', 'hands', [hand(80, 170), hand(120, 170)]); }
+    if (prop === 'dumbbells') {
+      const db = (x, y) => h('g', { transform: `translate(${x} ${y})` }, h('rect', { key: 1, x: -14, y: -2.5, width: 28, height: 5, rx: 2.5, fill: '#E0822A' }), h('rect', { key: 2, x: -19, y: -11, width: 9, height: 22, rx: 3.5, fill: '#FF9F43' }), h('rect', { key: 3, x: 10, y: -11, width: 9, height: 22, rx: 3.5, fill: '#FF9F43' }), h('circle', { key: 4, cx: 0, cy: 0, r: 8, fill: ARM }));
+      pr = part('prop', 'prop', [db(29, 86), db(171, 86)]);
+    }
+    const zz = c.zz && !only ? h('g', { key: 'zz', 'data-part': 'zz', fill: '#8A9A90', style: { fontFamily: 'Nunito,sans-serif', fontWeight: 900 } }, h('text', { key: 1, x: 146, y: 58, fontSize: 20 }, 'z'), h('text', { key: 2, x: 162, y: 40, fontSize: 15 }, 'z')) : null;
+    const tf = `translate(0 ${c.by || 0})` + (c.sy ? ` translate(100 210) scale(1 ${c.sy}) translate(-100 -210)` : '');
+    const shadow = shadowOn && !only ? E({ key: 'sh', cx: 100, cy: 226, rx: (c.by || 0) < -4 ? 46 : 58, ry: 7, fill: 'rgba(31,42,36,0.09)' }) : null;
+    return { svg: h('svg', { viewBox: '0 0 200 240', width: size, height: size * 1.2, style: { display: 'block', overflow: 'visible' } }, shadow, h('g', { key: 'pip', transform: tf, style: { transition: 'transform 400ms cubic-bezier(.34,1.56,.64,1)' } }, feet, body, legs, leaves, eyes, blush, mouth, arms, pr, hands, zz)) };
+  }
+}
+</script>
+</body>
+</html>

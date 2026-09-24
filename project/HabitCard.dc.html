@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div onClick="{{ tap }}" onPointerDown="{{ pd }}" onPointerUp="{{ pu }}" onPointerLeave="{{ pu }}" style="display:flex;align-items:center;gap:14px;padding:12.5px 16px;background:{{ bg }};border:{{ border }};border-radius:24px;box-shadow:{{ shadow }};transform:{{ tf }};transition:transform 160ms cubic-bezier(.34,1.56,.64,1),box-shadow 160ms;cursor:pointer;user-select:none;-webkit-user-select:none;font-family:Nunito,sans-serif;box-sizing:border-box">
+<div style="width:48px;height:48px;border-radius:24px;background:{{ tint }};display:flex;align-items:center;justify-content:center;flex:none;opacity:{{ op }}"><dc-import name="Icon" n="{{ icon }}" c="{{ base }}" s="26" hint-size="26px,26px"></dc-import></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:18px;font-weight:800;letter-spacing:-.2px;color:{{ titleC }};text-decoration:{{ deco }};text-decoration-thickness:2px;text-decoration-color:{{ decoC }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ name }}</div>
+<div style="font-size:14px;font-weight:400;color:{{ subC }};white-space:nowrap">{{ sub }}</div>
+</div>
+<div style="flex:none">{{ control }}</div>
+<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-width:54px;flex:none;opacity:{{ op }}"><dc-import name="Icon" n="flame" c="{{ base }}" s="22" hint-size="22px,22px"></dc-import>{{ num }}<div style="font-size:11px;font-weight:800;color:{{ ink }};margin-left:1px;align-self:flex-end;margin-bottom:2px">{{ unit }}</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:353,&quot;height&quot;:84},&quot;name&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Meditate&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;10 minutes&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;color&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;sky&quot;,&quot;tangerine&quot;,&quot;sunflower&quot;,&quot;lavender&quot;,&quot;teal&quot;,&quot;coral&quot;,&quot;berry&quot;,&quot;leaf&quot;],&quot;default&quot;:&quot;lavender&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;icon&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;lotus&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;due&quot;,&quot;progress&quot;,&quot;done&quot;,&quot;rest&quot;],&quot;default&quot;:&quot;due&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;progress&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;default&quot;:0,&quot;tsType&quot;:&quot;number&quot;},&quot;streak&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;},&quot;pressed&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const PAL = { sky: ['#4DA8F0', '#3A8BD1', '#E3F0FC', '#2F86D0'], tangerine: ['#FF9F43', '#E0822A', '#FFEBD8', '#D9731A'], sunflower: ['#FFC83D', '#E0AC22', '#FFF4D1', '#C28E0A'], lavender: ['#A78BFA', '#8B6FE0', '#EEE8FE', '#7A5CE0'], teal: ['#2EC4B6', '#22A396', '#DDF6F3', '#1A978A'], coral: ['#FF7A6B', '#E0604F', '#FFE6E2', '#D9533F'], berry: ['#E056A0', '#C03E84', '#FBE3F0', '#C03E84'], leaf: ['#58C27D', '#3E9A5C', '#E3F5E9', '#3E9A5C'] };
+class Component extends DCLogic {
+  state = { p: false };
+  renderVals() {
+    const h = React.createElement, d = this.props.h || this.props;
+    const [base, edge, tint0, ink0] = PAL[d.color] || PAL.leaf;
+    const dark = this.props.dark === true || this.props.dark === 'true';
+    const st = d.state || 'due', done = st === 'done', rest = st === 'rest';
+    const pressed = this.state.p || d.pressed === true || d.pressed === 'true';
+    const tint = dark ? `color-mix(in oklab, ${base} 24%, #1D2520)` : tint0;
+    const ink = dark ? base : ink0;
+    const streak = d.streak;
+    if (this._s !== undefined && String(this._s) !== String(streak)) this._fk = (this._fk || 0) + 1; this._s = streak;
+    if (this._d !== undefined && !this._d && done) this._dk = (this._dk || 0) + 1; this._d = done;
+    let control = null;
+    if (done) {
+      control = h('div', { key: 'c' + (this._dk || 0), style: { width: 44, height: 44, borderRadius: 22, background: '#58C27D', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: this._dk ? 'spPop 420ms cubic-bezier(.34,1.56,.64,1)' : 'none' } },
+        h('svg', { viewBox: '0 0 24 24', width: 26, height: 26 }, h('path', { d: 'M6.5 12.5l3.8 3.7 7.2-7.7', fill: 'none', stroke: '#fff', strokeWidth: 3.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: this._dk ? { strokeDasharray: 22, animation: 'spDraw 320ms 80ms ease-out both' } : {} })));
+    } else if (!rest) {
+      const R = 19, C = 2 * Math.PI * R, p = Math.max(0, Math.min(1, +(d.progress || 0)));
+      control = h('svg', { width: 44, height: 44, viewBox: '0 0 44 44', style: { display: 'block' } },
+        h('circle', { key: 1, cx: 22, cy: 22, r: R, fill: 'none', stroke: tint, strokeWidth: 5 }),
+        p > 0 ? h('circle', { key: 2, cx: 22, cy: 22, r: R, fill: 'none', stroke: base, strokeWidth: 5, strokeLinecap: 'round', strokeDasharray: `${C * p} ${C}`, transform: 'rotate(-90 22 22)', style: { transition: 'stroke-dasharray 500ms cubic-bezier(.34,1.56,.64,1)' } }) : null,
+        (d.kind === 'count' || d.kind === 'weekly') ? h('path', { key: 3, d: 'M22 16.5v11M16.5 22h11', stroke: ink, strokeWidth: 2.8, strokeLinecap: 'round' }) : null);
+    }
+    const num = h('div', { key: 'n' + (this._fk || 0), style: { fontWeight: 900, fontSize: 20, color: ink, lineHeight: 1, letterSpacing: '-.3px', animation: this._fk ? 'spFlip 460ms cubic-bezier(.34,1.56,.64,1)' : 'none' } }, streak);
+    return {
+      icon: d.icon || 'drop', base, ink, name: d.title || d.label, sub: d.sub, control, num, unit: d.unit || '', tint,
+      op: rest ? .6 : 1,
+      bg: rest ? (dark ? '#171E19' : '#F6F0E5') : (dark ? '#1D2520' : '#FFFFFF'),
+      border: rest ? `1.5px dashed ${dark ? '#2A332D' : '#E3D8C4'}` : '1.5px solid transparent',
+      shadow: rest || pressed ? `0 0 0 ${edge}` : `0 4px 0 ${edge}`,
+      tf: pressed && !rest ? 'translateY(4px)' : 'translateY(0px)',
+      titleC: done || rest ? (dark ? '#7E847C' : '#6B6F66') : (dark ? '#F2EEE6' : '#1F2A24'),
+      subC: dark ? '#A3A89E' : '#6B6F66', deco: done ? 'line-through' : 'none', decoC: dark ? '#7E847C' : '#B5B1A8',
+      tap: e => { const f = this.props.onTap || d.tap; f && f(e); },
+      pd: () => !rest && this.setState({ p: true }), pu: () => this.state.p && this.setState({ p: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

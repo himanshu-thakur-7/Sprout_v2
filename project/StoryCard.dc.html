@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div onClick="{{ tap }}" style="position:relative;width:393px;height:852px;overflow:hidden;background:{{ bg }};font-family:Nunito,sans-serif;cursor:pointer;user-select:none">
+<div style="position:absolute;left:-60px;top:120px;width:220px;height:220px;border-radius:50%;background:{{ glow }}"></div>
+<div style="position:absolute;right:-70px;top:520px;width:260px;height:260px;border-radius:50%;background:{{ glow }}"></div>
+{{ confetti }}
+<div style="position:relative;height:100%;display:flex;flex-direction:column">
+<dc-import name="StatusBar" dark="{{ dark }}" hint-size="393px,54px"></dc-import>
+<div style="display:flex;gap:6px;padding:6px 20px 0"><sc-for list="{{ segs }}" as="g" hint-placeholder-count="5"><div style="flex:1;height:5px;border-radius:3px;background:{{ track }};overflow:hidden"><div style="height:100%;width:{{ g }};background:{{ accent }};border-radius:3px"></div></div></sc-for></div>
+<div style="display:flex;justify-content:flex-end;padding:12px 16px 0"><div onClick="{{ close }}" style="width:40px;height:40px;border-radius:20px;background:{{ closeBg }};display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="close" c="{{ lineC }}" s="20" hint-size="20px,20px"></dc-import></div></div>
+<div style="display:flex;flex-direction:column;align-items:center;padding:14px 28px 0;text-align:center">
+<div style="display:flex;align-items:center;gap:8px;color:{{ numC }};font-size:{{ numSize }};font-weight:900;letter-spacing:-4px;line-height:1">{{ big }}<sc-if value="{{ bigIcon }}"><dc-import name="Icon" n="{{ bigIcon }}" c="{{ accent }}" c2="{{ bg2 }}" s="{{ iconS }}" hint-size="60px,60px"></dc-import></sc-if></div>
+<div style="margin-top:14px;font-size:30px;font-weight:900;letter-spacing:-.6px;line-height:1.12;color:{{ lineC }};max-width:320px;text-wrap:balance">{{ line }}</div>
+<sc-if value="{{ pill }}"><div style="margin-top:16px;padding:10px 18px;border-radius:22px;background:{{ pillBg }};font-size:16px;font-weight:800;color:{{ pillC }}">{{ pill }}</div></sc-if>
+</div>
+<div style="position:relative;flex:1;display:flex;justify-content:center;align-items:center">
+<sc-for list="{{ sparkles }}" as="s"><div style="position:absolute;left:{{ s.x }};top:{{ s.y }}"><dc-import name="Icon" n="sparkle" c="{{ s.c }}" s="{{ s.s }}" hint-size="20px,20px"></dc-import></div></sc-for>
+<dc-import name="Pip" mood="{{ mood }}" prop="{{ prop }}" size="200" hint-size="200px,240px"></dc-import>
+</div>
+<sc-if value="{{ final }}"><div style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 20px 40px"><div style="font-size:24px;font-weight:900;color:{{ numC }}">See you Monday.</div><div style="display:flex;gap:12px;align-self:stretch"><div style="flex:1;height:56px;border-radius:28px;background:#fff;box-shadow:0 4px 0 #E3C766;display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:900;color:#1F2A24" style-active="transform:translateY(4px);box-shadow:none"><dc-import name="Icon" n="share" c="#1F2A24" s="20" hint-size="20px,20px"></dc-import>Share</div><div style="flex:1;height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff" style-active="transform:translateY(4px);box-shadow:none">Done</div></div></div></sc-if>
+<sc-if value="{{ notFinal }}"><div style="text-align:center;padding:0 0 44px;font-size:15px;font-weight:700;color:{{ tapC }}">Tap to continue</div></sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:393,&quot;height&quot;:852},&quot;i&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;min&quot;:1,&quot;max&quot;:5,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const h = React.createElement, i = +(this.props.i || 1), dark = this.props.dark === true || this.props.dark === 'true';
+    const C = {
+      1: { bg: 'linear-gradient(180deg,#FFF6D9 0%,#FFF1C4 100%)', bg2: '#FFF3CC', glow: 'rgba(255,255,255,.45)', accent: '#FFC83D', numC: '#D39A0C', big: '7/7', line: 'You read every day this week.', mood: 'happy', prop: 'book', sp: '#FFC83D' },
+      2: { bg: 'linear-gradient(180deg,#FFF0E2 0%,#FFE4CC 100%)', bg2: '#FFE9D6', glow: 'rgba(255,255,255,.45)', accent: '#FF9F43', numC: '#E0822A', big: '9 weeks', bigIcon: 'flame', line: 'Your gym streak keeps growing.', mood: 'cheering', prop: 'dumbbells', sp: '#FF9F43', size: '84px' },
+      3: { bg: 'linear-gradient(180deg,#F3EFFE 0%,#E9E1FD 100%)', bg2: '#EEE8FE', glow: 'rgba(255,255,255,.5)', accent: '#A78BFA', numC: '#8B6FE0', big: 'Saved', bigIcon: 'shield', line: 'Your shield kept meditation alive.', mood: 'relieved', prop: 'meditate', sp: '#A78BFA', size: '92px' },
+      4: { bg: 'linear-gradient(180deg,#E6F8F4 0%,#D4F2EC 100%)', bg2: '#DDF6F3', glow: 'rgba(255,255,255,.5)', accent: '#2EC4B6', numC: '#1A978A', big: '3/5', line: 'Walk could use a little love.', pill: 'Next week, try a morning walk?', mood: 'happy', prop: 'sneakers', sp: '#2EC4B6' },
+      5: { bg: 'linear-gradient(180deg,#FFD84D 0%,#FFE58A 55%,#FFF0B8 100%)', bg2: '#FFE58A', glow: 'rgba(255,255,255,.35)', accent: '#FFFFFF', numC: '#9A6600', big: '26', line: 'habits kept this week.', mood: 'proud', prop: 'trophy', sp: '#FFFFFF', final: true, size: '150px' }
+    }[i];
+    const D = dark ? { bg: '#1E1A10', bg2: '#1E1A10', glow: 'rgba(255,200,61,.06)', numC: '#FFC83D', lineC: '#F2EEE6', tapC: '#A3A89E', track: 'rgba(255,255,255,.14)', closeBg: 'rgba(255,255,255,.08)', pillBg: 'rgba(255,255,255,.08)' } : {};
+    const cfg = { lineC: '#2F6B45', tapC: '#8C887F', track: 'rgba(31,42,36,.10)', closeBg: 'rgba(255,255,255,.55)', pillBg: 'rgba(255,255,255,.7)', pillC: '#1A978A', ...C, ...D };
+    const segs = [1, 2, 3, 4, 5].map(n => n <= i ? '100%' : '0%');
+    const sp = [{ x: '70px', y: '40px', s: 22 }, { x: '300px', y: '70px', s: 16 }, { x: '52px', y: '200px', s: 14 }, { x: '318px', y: '210px', s: 20 }].map(o => ({ ...o, c: cfg.sp }));
+    const confetti = cfg.final ? h('div', { style: { position: 'absolute', inset: 0, pointerEvents: 'none' } }, Array.from({ length: 30 }, (_, k) => { const a = (k * 137.5) * Math.PI / 180, rr = .35 + (k * 53 % 100) / 150, sq = k % 3 === 0; return h('div', { key: k, style: { position: 'absolute', left: 196 + Math.cos(a) * 180 * rr, top: 470 + Math.sin(a) * 220 * rr, width: 7, height: sq ? 7 : 12, borderRadius: sq ? 4 : 2, background: ['#4DA8F0', '#FF9F43', '#A78BFA', '#FF7A6B', '#2EC4B6', '#58C27D'][k % 6], transform: `rotate(${k * 47 % 180}deg)` } }); })) : null;
+    return { ...cfg, dark, segs, sparkles: sp, confetti, numSize: cfg.size || '128px', iconS: cfg.bigIcon === 'flame' ? 66 : 72, final: !!cfg.final, notFinal: !cfg.final, pill: cfg.pill || '', bigIcon: cfg.bigIcon || '',
+      tap: () => this.props.onTap && this.props.onTap(), close: e => { e.stopPropagation(); this.props.onClose && this.props.onClose(); } };
+  }
+}
+</script>
+</body>
+</html>

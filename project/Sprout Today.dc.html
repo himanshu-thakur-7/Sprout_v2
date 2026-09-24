@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>body{margin:0;background:#E8E2D6;font-family:Nunito,sans-serif;-webkit-font-smoothing:antialiased}a{color:#2F6B45;font-weight:800;text-decoration:none;white-space:nowrap}a:hover{color:#3E9A5C;text-decoration:underline}input{font-family:inherit}@keyframes spBurst{0%{transform:translate(0,0) scale(.3) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--r));opacity:0}}@keyframes spDraw{from{stroke-dashoffset:22}to{stroke-dashoffset:0}}@keyframes spFlip{0%{transform:translateY(70%);opacity:0}60%{transform:translateY(-14%);opacity:1}100%{transform:translateY(0)}}@keyframes spPop{0%{transform:scale(.6)}60%{transform:scale(1.14)}100%{transform:scale(1)}}</style></helmet>
+<div style="padding:48px 56px 96px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px"><a href="Sprout%20Design%20System.dc.html">Design system</a><a href="Sprout%20Onboarding.dc.html">Onboarding</a><a href="Sprout%20Today.dc.html">Today</a><a href="Sprout%20Habits.dc.html">Habits &amp; progress</a><a href="Sprout%20Recap%20and%20System.dc.html">Recap &amp; system</a></div>
+<div style="font-size:48px;font-weight:900;color:#1F2A24;letter-spacing:-1.2px">Sprout · Today</div>
+<div style="font-size:16px;line-height:1.5;color:#6B6F66;max-width:720px;text-wrap:pretty">Thursday, Sep 24, 2026. The daily badge counts only habits due today: Water, Gym, Read and Meditate. Walk is on a rest day, so it's 1/4, not 2/5. Screen 05 is live: tap the cards to log water, check things off and watch Pip's mood follow along.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:28px;font-weight:900;color:#1F2A24;letter-spacing:-.5px">Home</div>
+<div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
+<div data-screen-label="05 Home, mid-day" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">05</span>Home, mid-day · interactive</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45)"><dc-import name="HomeScreen" variant="mid" hint-size="393px,852px"></dc-import></div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">Try it: tap the water ring to add a glass, tap Meditate to finish it. Card press drops 4px and the edge disappears (160 ms spring). Pip goes Expectant → Happy → Cheering as the badge fills.</div>
+</div>
+<div data-screen-label="06 Home, evening" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">06</span>Home, evening</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45)"><dc-import name="HomeScreen" variant="evening" hint-size="393px,852px"></dc-import></div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">8:40 pm. The top of the screen cools to a dusk blue-grey, Pip goes Droopy (half-lids, leaves wilting forward, still on top). Undone cards stay bright and full contrast. Nothing turns red.</div>
+</div>
+<div data-screen-label="07 Home, empty" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">07</span>Home, empty state</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45)"><dc-import name="HomeScreen" variant="empty" hint-size="393px,852px"></dc-import></div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">No badge until something is planted. Both the button and the + open the Add habit sheet.</div>
+</div>
+<div data-screen-label="Dark Home" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">D1</span>Home, dark mode</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45)"><dc-import name="HomeScreen" variant="dark" hint-size="393px,852px"></dc-import></div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">Dark palette check: forest-black #131915 ground, #1D2520 cards. Accent edges and the green done circle carry over unchanged. Icon tints are 24% of the accent over the card. Pip stays cream.</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:28px;font-weight:900;color:#1F2A24;letter-spacing:-.5px">08 · Completion moment</div><div style="font-size:15px;color:#6B6F66;max-width:720px;line-height:1.5">Checking off Meditate. Springy easing, cubic-bezier(.34, 1.56, .64, 1). Total ≈ 1.1 s, which is the one place we allow a longer beat.</div></div>
+<div data-screen-label="08 Completion storyboard" style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<sc-for list="{{ frames }}" as="f" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:12px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#58C27D;color:#fff;border-radius:6px;padding:2px 7px;font-size:11px">{{ f.n }}</span>{{ f.title }}<span style="margin-left:auto;white-space:nowrap;font-size:12px;font-weight:700;color:#6B6F66">{{ f.time }}</span></div>
+<div style="width:393px;height:392px;border-radius:32px;overflow:hidden;position:relative;background:#FBF7F0;box-shadow:0 0 0 1.5px #D9D0C0,0 20px 40px -20px rgba(31,42,36,.3)">
+<div style="position:absolute;left:-100px;right:-100px;top:200px;height:480px;border-radius:50%;background:#F1E7D6"></div>
+<div style="position:relative">
+<dc-import name="StatusBar" time="12:34" hint-size="393px,54px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:44px"><div style="font-size:12px;font-weight:800;letter-spacing:.6px;white-space:nowrap;color:#2F6B45">THURSDAY, SEP 24</div><div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:24px;background:#fff;box-shadow:0 3px 0 #ECE4D6"><div style="font-size:17px;font-weight:900">{{ f.badge }}</div><div style="width:30px;height:30px;border-radius:15px;background:{{ f.ring }};display:flex;align-items:center;justify-content:center"><div style="width:21px;height:21px;border-radius:11px;background:#fff"></div></div></div></div>
+<div style="position:relative;height:168px"><div style="position:absolute;left:50%;top:0;transform:translateX(-50%)"><dc-import name="Pip" mood="{{ f.mood }}" size="120" hint-size="120px,144px"></dc-import></div><sc-if value="{{ f.bubble }}"><div style="position:absolute;left:258px;top:20px;padding:8px 12px;border-radius:16px 16px 16px 4px;background:#fff;box-shadow:0 3px 0 #ECE4D6;font-size:13px;font-weight:700">{{ f.bubble }}</div></sc-if></div>
+<div style="padding:0 20px"><dc-import name="HabitCard" h="{{ f.card }}" hint-size="100%,76px"></dc-import></div>
+</div>
+{{ f.fx }}
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">{{ f.note }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
+<div data-screen-label="09 Perfect day" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">09</span>Perfect day</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;background:linear-gradient(180deg,#FFE7A0 0%,#FFF1C9 38%,#FFF8E6 62%,#FBF7F0 100%);box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45);font-family:Nunito,sans-serif;color:#1F2A24">
+<div style="position:absolute;left:-110px;right:-110px;top:250px;height:300px;border-radius:50%;background:#FBDD8A"></div>
+{{ perfectConfetti }}
+<div style="position:relative;display:flex;flex-direction:column">
+<dc-import name="StatusBar" time="9:12" hint-size="393px,54px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:44px"><div style="font-size:12px;font-weight:800;letter-spacing:.6px;white-space:nowrap;color:#2F6B45">THURSDAY, SEP 24</div><div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:24px;background:#fff;box-shadow:0 3px 0 #EBD28A"><div style="font-size:17px;font-weight:900">4/4</div><div style="width:30px;height:30px;border-radius:15px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="18" hint-size="18px,18px"></dc-import></div></div></div>
+<div style="height:218px;display:flex;justify-content:center;padding-top:12px"><dc-import name="Pip" mood="cheering" size="150" hint-size="150px,180px"></dc-import></div>
+<div style="text-align:center;font-size:44px;font-weight:900;letter-spacing:-1.2px;line-height:1.05;margin-top:4px">Perfect day</div>
+<div style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px;font-size:16px;font-weight:600;color:#6B6F66">4 perfect days this month<dc-import name="Icon" n="sparkle" c="#FFC83D" s="16" hint-size="16px,16px"></dc-import></div>
+<div style="margin:22px 20px 0;background:#fff;border-radius:24px;box-shadow:0 3px 0 #EBD28A;padding:4px 16px">
+<sc-for list="{{ perfectRows }}" as="r" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:14px;height:58px;border-bottom:{{ r.line }}"><div style="width:38px;height:38px;border-radius:19px;background:{{ r.tint }};display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="{{ r.icon }}" c="{{ r.base }}" s="21" hint-size="21px,21px"></dc-import></div><div style="flex:1;font-size:17px;font-weight:800;color:#6B6F66;text-decoration:line-through;text-decoration-color:#B5B1A8;text-decoration-thickness:2px">{{ r.name }}</div><div style="display:flex;align-items:center;gap:2px;font-size:15px;font-weight:900;color:{{ r.ink }}"><dc-import name="Icon" n="flame" c="{{ r.base }}" s="16" hint-size="16px,16px"></dc-import>{{ r.streak }}</div><div style="width:30px;height:30px;border-radius:15px;background:#58C27D;display:flex;align-items:center;justify-content:center;margin-left:6px"><dc-import name="Icon" n="check" c="#fff" s="18" hint-size="18px,18px"></dc-import></div></div></sc-for>
+</div>
+<div style="margin:12px 20px 0;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:#8C887F;padding:0 16px"><dc-import name="Icon" n="shoe" c="#2EC4B6" s="16" hint-size="16px,16px"></dc-import>Walk · Rest day, back tomorrow</div>
+</div>
+<dc-import name="BottomNav" active="today" style="position:absolute;left:0;right:0;bottom:0" hint-size="393px,84px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">Motion: when the 4th habit lands, cards lift away (staggered 40 ms, 380 ms each), the golden wash fades up, Pip hops to center stage and cheers, then a compact struck-through list settles back in. Walk stays out of the list because it isn't due today.</div>
+</div>
+
+<div data-screen-label="10 Add habit sheet" style="display:flex;flex-direction:column;gap:14px;width:393px">
+<div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#1F2A24"><span style="background:#1F2A24;color:#FBF7F0;border-radius:6px;padding:2px 7px;font-size:11px">10</span>Add habit sheet · interactive</div>
+<div style="width:393px;height:852px;border-radius:48px;overflow:hidden;position:relative;box-shadow:0 0 0 9px #1F2A24,0 40px 70px -20px rgba(31,42,36,.45);font-family:Nunito,sans-serif;color:#1F2A24">
+<dc-import name="HomeScreen" variant="mid" hint-size="393px,852px"></dc-import>
+<div style="position:absolute;inset:0;background:rgba(31,42,36,.42)"></div>
+<div style="position:absolute;right:43px;top:84px"><dc-import name="Pip" mood="expectant" size="100" shadow="false" hint-size="100px,120px"></dc-import></div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:696px;background:#fff;border-radius:32px 32px 0 0;overflow:hidden;display:flex;flex-direction:column">
+<div style="background:{{ sh.tint }};padding:10px 20px 18px;transition:background 250ms;display:flex;flex-direction:column;gap:14px">
+<div style="align-self:center;width:40px;height:5px;border-radius:3px;background:#D5CDBF"></div>
+<div style="display:flex;align-items:center;gap:14px"><div style="width:56px;height:56px;border-radius:28px;background:{{ sh.base }};box-shadow:0 3px 0 {{ sh.edge }};display:flex;align-items:center;justify-content:center;flex:none;transition:background 250ms"><dc-import name="Icon" n="drop" c="#FFFFFF" s="30" hint-size="30px,30px"></dc-import></div><input value="{{ name }}" onChange="{{ onName }}" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:28px;font-weight:900;letter-spacing:-.5px;color:#1F2A24;caret-color:{{ sh.base }};padding:0"></div>
+</div>
+<div style="padding:14px 20px 28px;display:flex;flex-direction:column;gap:12px;flex:1">
+<div style="display:flex;justify-content:space-between"><sc-for list="{{ swatches }}" as="w" hint-placeholder-count="8"><div onClick="{{ w.pick }}" style="width:34px;height:34px;border-radius:17px;background:{{ w.bg }};box-shadow:{{ w.sh }};cursor:pointer;transition:box-shadow 180ms"></div></sc-for></div>
+<div style="font-size:20px;font-weight:800;letter-spacing:-.2px;margin-top:2px">How often?</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="border-radius:18px;background:#fff;border:2px solid {{ o1.bc }};box-shadow:0 3px 0 {{ o1.ec }};overflow:hidden">
+<div onClick="{{ o1.pick }}" style="display:flex;align-items:center;gap:12px;padding:0 14px;height:50px;cursor:pointer"><dc-import name="Icon" n="calendar" c="{{ o1.ic }}" s="22" hint-size="22px,22px"></dc-import><div style="flex:1;font-size:16px;font-weight:{{ o1.fw }};color:{{ o1.tc }}">Every day</div><sc-if value="{{ o1.on }}"><div style="width:26px;height:26px;border-radius:13px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="16" hint-size="16px,16px"></dc-import></div></sc-if><sc-if value="{{ o1.off }}"><div style="width:22px;height:22px;border-radius:13px;border:2px solid #D5CDBF"></div></sc-if></div>
+<sc-if value="{{ o1.on }}"><div style="padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between"><sc-for list="{{ days }}" as="d"><div onClick="{{ d.tog }}" style="width:36px;height:36px;border-radius:18px;background:{{ d.bg }};box-shadow:{{ d.sh }};color:{{ d.c }};font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer">{{ d.l }}</div></sc-for></div><div style="font-size:13px;color:#6B6F66;text-align:center">{{ daysLabel }}</div></div></sc-if>
+</div>
+<div style="border-radius:18px;background:#fff;border:2px solid {{ o2.bc }};box-shadow:0 3px 0 {{ o2.ec }};overflow:hidden">
+<div onClick="{{ o2.pick }}" style="display:flex;align-items:center;gap:12px;padding:0 14px;height:50px;cursor:pointer"><dc-import name="Icon" n="repeat" c="{{ o2.ic }}" s="22" hint-size="22px,22px"></dc-import><div style="flex:1;font-size:16px;font-weight:{{ o2.fw }};color:{{ o2.tc }}">A few times a week</div><sc-if value="{{ o2.on }}"><div style="width:26px;height:26px;border-radius:13px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="16" hint-size="16px,16px"></dc-import></div></sc-if><sc-if value="{{ o2.off }}"><div style="width:22px;height:22px;border-radius:13px;border:2px solid #D5CDBF"></div></sc-if></div>
+<sc-if value="{{ o2.on }}"><div style="padding:2px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="display:flex;align-items:center;gap:14px"><div onClick="{{ perDown }}" style="width:40px;height:40px;border-radius:20px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="minus" c="#1F2A24" s="18" hint-size="18px,18px"></dc-import></div><div style="min-width:150px;text-align:center;font-size:17px;font-weight:800">{{ perLabel }}</div><div onClick="{{ perUp }}" style="width:40px;height:40px;border-radius:20px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="plus" c="#1F2A24" s="18" hint-size="18px,18px"></dc-import></div></div><div style="font-size:13px;color:#6B6F66">Any days you like. Your streak counts in weeks.</div></div></sc-if>
+</div>
+<div style="border-radius:18px;background:#fff;border:2px solid {{ o3.bc }};box-shadow:0 3px 0 {{ o3.ec }};overflow:hidden">
+<div onClick="{{ o3.pick }}" style="display:flex;align-items:center;gap:12px;padding:0 14px;height:50px;cursor:pointer"><dc-import name="Icon" n="clock" c="{{ o3.ic }}" s="22" hint-size="22px,22px"></dc-import><div style="flex:1;font-size:16px;font-weight:{{ o3.fw }};color:{{ o3.tc }}">Throughout the day</div><sc-if value="{{ o3.on }}"><div style="width:26px;height:26px;border-radius:13px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="16" hint-size="16px,16px"></dc-import></div></sc-if><sc-if value="{{ o3.off }}"><div style="width:22px;height:22px;border-radius:13px;border:2px solid #D5CDBF"></div></sc-if></div>
+<sc-if value="{{ o3.on }}"><div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:8px">
+<div style="position:relative;height:20px;display:flex;align-items:center;justify-content:space-between"><div style="position:absolute;left:8px;right:8px;top:9px;height:2px;border-radius:1px;background:{{ sh.tint }}"></div><sc-for list="{{ dots }}" as="d"><div style="position:relative;width:{{ d.s }};height:{{ d.s }};border-radius:50%;background:{{ sh.base }};box-shadow:{{ d.sh }}"></div></sc-for></div>
+<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#6B6F66"><span>8 am</span><span>10 pm</span></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:2px"><div onClick="{{ ivDown }}" style="width:40px;height:40px;border-radius:20px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="minus" c="#1F2A24" s="18" hint-size="18px,18px"></dc-import></div><div style="min-width:140px;text-align:center;font-size:17px;font-weight:800">{{ ivLabel }}</div><div onClick="{{ ivUp }}" style="width:40px;height:40px;border-radius:20px;background:#F1E7D6;display:flex;align-items:center;justify-content:center;cursor:pointer"><dc-import name="Icon" n="plus" c="#1F2A24" s="18" hint-size="18px,18px"></dc-import></div></div>
+<div style="font-size:13px;color:#6B6F66;text-align:center">{{ remLabel }}</div>
+</div></sc-if>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:52px;border-radius:18px;background:#FBF7F0;box-shadow:0 3px 0 #ECE4D6"><dc-import name="Icon" n="bell" c="#6B6F66" s="20" hint-size="20px,20px"></dc-import><div style="flex:1;font-size:16px;font-weight:700">Reminder</div><div style="font-size:15px;font-weight:800;color:#2F6B45">{{ remTime }}</div><dc-import name="Icon" n="chevR" c="#B5B1A8" s="18" hint-size="18px,18px"></dc-import></div>
+<div style="flex:1"></div>
+<div style="height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 120ms cubic-bezier(.34,1.56,.64,1),box-shadow 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C">Add habit</div>
+</div>
+</div>
+<div style="position:absolute;left:262px;top:148px;width:24px;height:17px;border-radius:50%;background:#EBD9BB"></div>
+<div style="position:absolute;left:320px;top:148px;width:24px;height:17px;border-radius:50%;background:#EBD9BB"></div>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#6B6F66;text-wrap:pretty">Only the selected option expands (240 ms spring). The interval stepper and reminder count live inside "Throughout the day". Try it: switch options, change the color, step the interval. Pip holds onto the sheet edge.</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PAL = { leaf: ['#58C27D', '#3E9A5C', '#E3F5E9'], sky: ['#4DA8F0', '#3A8BD1', '#E3F0FC'], sunflower: ['#FFC83D', '#E0AC22', '#FFF4D1'], coral: ['#FF7A6B', '#E0604F', '#FFE6E2'], lavender: ['#A78BFA', '#8B6FE0', '#EEE8FE'], tangerine: ['#FF9F43', '#E0822A', '#FFEBD8'], teal: ['#2EC4B6', '#22A396', '#DDF6F3'], berry: ['#E056A0', '#C03E84', '#FBE3F0'] };
+class Component extends DCLogic {
+  state = { color: 'sky', freq: 'thru', iv: 2, name: 'Drink water', days: [1, 1, 1, 1, 1, 1, 1], per: 4 };
+  pieces(n, cx, cy, sx, sy, cols, seed, big) {
+    const h = React.createElement;
+    return Array.from({ length: n }, (_, i) => {
+      const a = (i * 137.5 + seed) * Math.PI / 180, rr = .3 + ((i * 53 + seed) % 100) / 140, sq = i % 3 === 0;
+      return h('div', { key: i, style: { position: 'absolute', left: cx + Math.cos(a) * sx * rr, top: cy + Math.sin(a) * sy * rr, width: sq ? 7 : (big ? 7 : 5), height: sq ? 7 : (big ? 12 : 9), borderRadius: sq ? 4 : 2, background: cols[i % cols.length], transform: `rotate(${(i * 47) % 180}deg)` } });
+    });
+  }
+  renderVals() {
+    const h = React.createElement, s = this.state, [base, edge, tint] = PAL[s.color];
+    const med = st => ({ title: 'Meditate', sub: '10 minutes', color: 'lavender', icon: 'lotus', kind: 'daily', ...st });
+    const ring = p => `conic-gradient(#58C27D 0 ${p}%, #ECE4D6 ${p}% 100%)`;
+    const L = ['#A78BFA', '#58C27D', '#FFC83D', '#8B6FE0', '#EEE8FE'];
+    const fx2 = h('div', { style: { position: 'absolute', inset: 0, pointerEvents: 'none' } },
+      h('div', { key: 'g', style: { position: 'absolute', left: 302, top: 276, width: 56, height: 56, borderRadius: 28, background: 'radial-gradient(circle, rgba(167,139,250,.55), rgba(167,139,250,0) 70%)' } }),
+      h('div', { key: 'p' }, this.pieces(22, 265, 300, 80, 60, L, 7, true)));
+    const fx3 = h('div', { style: { position: 'absolute', inset: 0, pointerEvents: 'none' } },
+      h('svg', { key: 'a', width: 393, height: 392, style: { position: 'absolute', left: 0, top: 0 } },
+        h('path', { d: 'M266 288 Q300 190 222 170', fill: 'none', stroke: '#FFD466', strokeWidth: 6, strokeLinecap: 'round', opacity: .35 }),
+        h('path', { d: 'M266 288 Q300 190 222 170', fill: 'none', stroke: '#FFC83D', strokeWidth: 2.5, strokeLinecap: 'round', strokeDasharray: '4 7' }),
+        h('circle', { cx: 222, cy: 170, r: 7, fill: '#FFE08A' }), h('circle', { cx: 222, cy: 170, r: 14, fill: '#FFE08A', opacity: .35 })),
+      h('div', { key: 'o', style: { position: 'absolute', left: 330, top: 236, fontSize: 20, fontWeight: 900, color: '#7A5CE0', opacity: .3, fontFamily: 'Nunito' } }, '5'),
+      h('div', { key: 'o2', style: { position: 'absolute', left: 344, top: 254, fontSize: 11, fontWeight: 800, color: '#7A5CE0' } }, '↑'));
+    const frames = [
+      { n: '1', title: 'Press', time: '0–120 ms', badge: '1/4', ring: ring(25), mood: 'expectant', bubble: '', card: med({ state: 'due', streak: 5, pressed: true }), fx: null, note: 'Finger down: the card sinks 4px and its lavender edge disappears. Light haptic on release.' },
+      { n: '2', title: 'Burst', time: '120–420 ms', badge: '1/4', ring: ring(25), mood: 'happy', bubble: '', card: med({ state: 'done', streak: 5, sub: 'Done' }), fx: fx2, note: 'The tick draws in (240 ms) and confetti bursts from the check in lavender with a little green and gold. The flame flares to 1.3× and glows.' },
+      { n: '3', title: 'Count up', time: '420–760 ms', badge: '2/4', ring: ring(50), mood: 'cheering', bubble: '', card: med({ state: 'done', streak: 6, sub: 'Done' }), fx: fx3, note: 'The streak flips 5 → 6 like a counter. A thin arc of light travels from the card to Pip. Pip cheers and the badge ring advances.' },
+      { n: '4', title: 'Settle', time: '760–1100 ms', badge: '2/4', ring: ring(50), mood: 'happy', bubble: 'Two down!', card: med({ state: 'done', streak: 6, sub: 'Done' }), fx: null, note: 'The card settles into its done state: strikethrough, green circle, flame and 6 still in lavender. Pip comes back down to Happy.' }
+    ];
+    const perfectRows = [['Drink water', 'drop', '#4DA8F0', '#E3F0FC', '#2F86D0', 12], ['Gym', 'dumbbell', '#FF9F43', '#FFEBD8', '#D9731A', '8wk'], ['Read', 'book', '#FFC83D', '#FFF4D1', '#C28E0A', 24], ['Meditate', 'lotus', '#A78BFA', '#EEE8FE', '#7A5CE0', 6]]
+      .map(([name, icon, b, t, ink, streak], i) => ({ name, icon, base: b, tint: t, ink, streak, line: i < 3 ? '1.5px solid #F3EDE2' : 'none' }));
+    const perfectConfetti = h('div', { style: { position: 'absolute', inset: 0, pointerEvents: 'none' } }, this.pieces(34, 196, 200, 190, 130, ['#4DA8F0', '#FF9F43', '#A78BFA', '#FF7A6B', '#2EC4B6', '#58C27D', '#FFC83D'], 3, true));
+    const n = Math.floor(14 / s.iv) + 1;
+    const dots = Array.from({ length: n }, (_, i) => { const end = i === 0 || i === n - 1; return { s: end ? '18px' : '10px', sh: end ? `0 0 0 3px ${tint}` : 'none' }; });
+    const opt = id => { const on = s.freq === id; return { on, off: !on, bc: on ? '#58C27D' : '#ECE4D6', ec: on ? '#3E9A5C' : '#ECE4D6', ic: on ? '#2F6B45' : '#6B6F66', tc: on ? '#1F2A24' : '#6B6F66', fw: on ? 800 : 600, pick: () => this.setState({ freq: id }) }; };
+    const dayN = s.days.filter(Boolean).length;
+    return {
+      frames, perfectRows, perfectConfetti,
+      sh: { base, edge, tint }, name: s.name, onName: e => this.setState({ name: e.target.value }),
+      swatches: Object.keys(PAL).map(k => ({ bg: PAL[k][0], sh: k === s.color ? `0 0 0 3px #FFFFFF, 0 0 0 5.5px ${PAL[k][0]}` : `0 3px 0 ${PAL[k][1]}`, pick: () => this.setState({ color: k }) })),
+      o1: opt('day'), o2: opt('week'), o3: opt('thru'),
+      days: 'MTWTFSS'.split('').map((l, i) => { const on = !!s.days[i]; return { l, bg: on ? base : '#F1E7D6', c: on ? '#FFFFFF' : '#6B6F66', sh: on ? `0 3px 0 ${edge}` : 'none', tog: () => this.setState(st => { const d = [...st.days]; d[i] = d[i] ? 0 : 1; return { days: d }; }) }; }),
+      daysLabel: dayN === 7 ? 'Every day. Rest days are yours to pick.' : `${dayN} days a week`,
+      perLabel: `${s.per} times a week`, perDown: () => this.setState(st => ({ per: Math.max(1, st.per - 1) })), perUp: () => this.setState(st => ({ per: Math.min(6, st.per + 1) })),
+      dots, ivLabel: `Every ${s.iv} hour${s.iv > 1 ? 's' : ''}`, remLabel: `${n} reminders a day`,
+      ivDown: () => this.setState(st => ({ iv: Math.max(1, st.iv - 1) })), ivUp: () => this.setState(st => ({ iv: Math.min(4, st.iv + 1) })),
+      remTime: s.freq === 'thru' ? 'From 8:00 am' : s.freq === 'day' ? '9:00 pm' : '7:30 am'
+    };
+  }
+}
+</script>
+</body>
+</html>

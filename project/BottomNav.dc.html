@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;height:84px;background:{{ bg }};border-top:1.5px solid {{ line }};display:flex;justify-content:space-around;padding:10px 70px 0 16px;box-sizing:border-box;font-family:Nunito,sans-serif">
+<sc-for list="{{ items }}" as="it" hint-placeholder-count="3"><div onClick="{{ it.go }}" style="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px;cursor:pointer"><dc-import name="Icon" n="{{ it.icon }}" c="{{ it.c }}" s="26" hint-size="26px,26px"></dc-import><div style="font-size:12px;font-weight:800;color:{{ it.tc }}">{{ it.label }}</div></div></sc-for>
+<div style="position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:{{ ind }}"></div>
+<sc-if value="{{ fab }}" hint-placeholder-val="{{ true }}"><div onClick="{{ onFab }}" style="position:absolute;right:20px;top:-34px;width:60px;height:60px;border-radius:30px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 140ms cubic-bezier(.34,1.56,.64,1),box-shadow 140ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C"><dc-import name="Icon" n="plus" c="#FFFFFF" s="30" hint-size="30px,30px"></dc-import></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:393,&quot;height&quot;:130},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;today&quot;,&quot;progress&quot;,&quot;you&quot;],&quot;default&quot;:&quot;today&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;fab&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const dark = this.props.dark === true || this.props.dark === 'true', a = this.props.active || 'today';
+    const items = [['today', 'Today', 'home'], ['progress', 'Progress', 'chart'], ['you', 'You', 'person']].map(([id, label, icon]) => ({
+      label, icon, c: id === a ? '#58C27D' : (dark ? '#5E665F' : '#B5B1A8'), tc: id === a ? (dark ? '#7FD49C' : '#2F6B45') : (dark ? '#7E847C' : '#9A968D'),
+      go: () => this.props.onNav && this.props.onNav(id)
+    }));
+    return { items, bg: dark ? '#1A211C' : '#FFFFFF', line: dark ? '#2A332D' : '#ECE4D6', ind: dark ? '#F2EEE6' : '#1F2A24', fab: this.props.fab !== false && this.props.fab !== 'false', onFab: () => this.props.onFab && this.props.onFab() };
+  }
+}
+</script>
+</body>
+</html>

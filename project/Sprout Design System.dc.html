@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>body{margin:0;background:#FBF7F0;font-family:Nunito,sans-serif;color:#1F2A24;-webkit-font-smoothing:antialiased}a{color:#2F6B45;font-weight:800;text-decoration:none;white-space:nowrap}a:hover{color:#3E9A5C;text-decoration:underline}@keyframes spDraw{from{stroke-dashoffset:22}to{stroke-dashoffset:0}}@keyframes spFlip{0%{transform:translateY(70%);opacity:0}100%{transform:translateY(0)}}@keyframes spPop{0%{transform:scale(.6)}60%{transform:scale(1.14)}100%{transform:scale(1)}}</style></helmet>
+<div style="max-width:1280px;padding:48px 56px 120px;display:flex;flex-direction:column;gap:72px">
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px"><a href="Sprout%20Design%20System.dc.html">Design system</a><a href="Sprout%20Onboarding.dc.html">Onboarding</a><a href="Sprout%20Today.dc.html">Today</a><a href="Sprout%20Habits.dc.html">Habits &amp; progress</a><a href="Sprout%20Recap%20and%20System.dc.html">Recap &amp; system</a></div>
+<div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap"><dc-import name="Pip" mood="waving" size="110" hint-size="110px,132px"></dc-import><div style="flex:1;min-width:0"><div style="font-size:64px;font-weight:900;letter-spacing:-2px;line-height:1">Sprout</div><div style="font-size:20px;font-weight:700;color:#6B6F66;margin-top:6px">Design system, components &amp; Pip</div></div></div>
+<div style="font-size:16px;line-height:1.55;color:#6B6F66;max-width:760px;text-wrap:pretty">Playful like Duolingo, calmer and warmer. The signature is the <b style="color:#1F2A24">hard bottom edge</b>: every card and button sits on a solid 4px ledge in its darker shade, with no blur, so it reads as a physical, pressable thing. Proud numbers are huge. Everything else is quiet.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">01 · COLOR</div>
+<div style="font-size:32px;font-weight:900;letter-spacing:-.6px">Neutrals</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px">
+<sc-for list="{{ neutrals }}" as="c"><div style="display:flex;flex-direction:column;gap:8px"><div style="height:84px;border-radius:20px;background:{{ c.hex }};box-shadow:0 3px 0 #ECE4D6,inset 0 0 0 1px rgba(31,42,36,.06)"></div><div style="font-size:14px;font-weight:800">{{ c.name }}</div><div style="font-size:12px;color:#6B6F66;font-family:ui-monospace,Menlo,monospace">{{ c.hex }}</div></div></sc-for>
+</div>
+<div style="font-size:32px;font-weight:900;letter-spacing:-.6px;margin-top:12px">Habit accents</div>
+<div style="font-size:15px;color:#6B6F66;max-width:760px;line-height:1.5;margin-top:-12px">Each habit picks one accent. <b>Base</b> fills icons, rings and flames. <b>Edge</b> is the hard ledge. <b>Tint</b> sits behind icons and ring tracks. <b>Ink</b> is a deeper shade I added for streak numbers and small text so they pass contrast on white.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px">
+<sc-for list="{{ accents }}" as="a"><div style="background:#fff;border-radius:24px;box-shadow:0 4px 0 {{ a.edge }};padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:24px;background:{{ a.tint }};display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="{{ a.icon }}" c="{{ a.base }}" s="26" hint-size="26px,26px"></dc-import></div><div style="flex:1;font-size:18px;font-weight:800">{{ a.name }}</div><div style="display:flex;align-items:center;gap:2px;font-size:20px;font-weight:900;color:{{ a.ink }}"><dc-import name="Icon" n="flame" c="{{ a.base }}" s="20" hint-size="20px,20px"></dc-import>12</div></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"><div style="display:flex;flex-direction:column;gap:4px"><div style="height:34px;border-radius:10px;background:{{ a.base }}"></div><div style="font-size:10px;font-family:ui-monospace,Menlo,monospace;color:#6B6F66">{{ a.base }}</div></div><div style="display:flex;flex-direction:column;gap:4px"><div style="height:34px;border-radius:10px;background:{{ a.edge }}"></div><div style="font-size:10px;font-family:ui-monospace,Menlo,monospace;color:#6B6F66">{{ a.edge }}</div></div><div style="display:flex;flex-direction:column;gap:4px"><div style="height:34px;border-radius:10px;background:{{ a.tint }}"></div><div style="font-size:10px;font-family:ui-monospace,Menlo,monospace;color:#6B6F66">{{ a.tint }}</div></div><div style="display:flex;flex-direction:column;gap:4px"><div style="height:34px;border-radius:10px;background:{{ a.ink }}"></div><div style="font-size:10px;font-family:ui-monospace,Menlo,monospace;color:#6B6F66">{{ a.ink }}</div></div></div>
+</div></sc-for>
+</div>
+<div style="font-size:32px;font-weight:900;letter-spacing:-.6px;margin-top:12px">Celebration grounds &amp; dark mode</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px">
+<sc-for list="{{ grounds }}" as="c"><div style="display:flex;flex-direction:column;gap:8px"><div style="height:84px;border-radius:20px;background:{{ c.hex }};box-shadow:inset 0 0 0 1px rgba(31,42,36,.06)"></div><div style="font-size:14px;font-weight:800">{{ c.name }}</div><div style="font-size:12px;color:#6B6F66;font-family:ui-monospace,Menlo,monospace">{{ c.code }}</div></div></sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">02 · TYPE · NUNITO</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:8px 28px">
+<sc-for list="{{ type }}" as="t"><div style="display:flex;align-items:baseline;gap:24px;padding:18px 0;border-bottom:1.5px solid #F3EDE2;flex-wrap:wrap"><div style="width:190px;flex:none"><div style="font-size:14px;font-weight:800">{{ t.name }}</div><div style="font-size:12px;color:#6B6F66">{{ t.spec }}</div></div><div style="font-size:{{ t.size }};font-weight:{{ t.w }};letter-spacing:{{ t.ls }};text-transform:{{ t.tt }};line-height:1.05;color:{{ t.c }}">{{ t.sample }}</div></div></sc-for>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:40px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">03 · SPACING · 8PX GRID</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:22px;display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ spacing }}" as="s"><div style="display:flex;align-items:center;gap:14px"><div style="width:52px;font-size:13px;font-weight:800;font-family:ui-monospace,Menlo,monospace">{{ s.v }}</div><div style="height:16px;width:{{ s.w }};border-radius:4px;background:#58C27D"></div><div style="font-size:13px;color:#6B6F66">{{ s.use }}</div></div></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">04 · RADII</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:22px;display:flex;flex-wrap:wrap;gap:18px">
+<sc-for list="{{ radii }}" as="r"><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:76px;height:60px;background:#F1E7D6;border-radius:{{ r.v }}"></div><div style="font-size:13px;font-weight:800">{{ r.v }}</div><div style="font-size:11px;color:#6B6F66">{{ r.use }}</div></div></sc-for>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">05 · DEPTH · THE HARD EDGE</div>
+<div style="font-size:15px;color:#6B6F66;max-width:760px;line-height:1.5">box-shadow: 0 4px 0 [edge], with zero blur, always. Accent elements get their accent's edge. Neutral containers get 3px of #ECE4D6. When pressed, the element moves down by the edge height and the edge goes to 0. Press any of these.</div>
+<div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end">
+<div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:150px;height:96px;border-radius:24px;background:#fff;box-shadow:0 4px 0 #E0822A;transition:all 140ms cubic-bezier(.34,1.56,.64,1);cursor:pointer" style-active="transform:translateY(4px);box-shadow:0 0 0 #E0822A"></div><div style="font-size:13px;font-weight:800">Accent card · 4px</div></div>
+<div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:150px;height:96px;border-radius:24px;background:#fff;box-shadow:0 0 0 #E0822A;transform:translateY(4px)"></div><div style="font-size:13px;font-weight:800">Pressed · +4px, edge 0</div></div>
+<div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:150px;height:96px;border-radius:24px;background:#fff;box-shadow:0 3px 0 #ECE4D6;transition:all 140ms cubic-bezier(.34,1.56,.64,1);cursor:pointer" style-active="transform:translateY(3px);box-shadow:0 0 0 #ECE4D6"></div><div style="font-size:13px;font-weight:800">Neutral · 3px #ECE4D6</div></div>
+<div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:150px;height:96px;border-radius:24px;background:#F6F0E5;border:1.5px dashed #E3D8C4;box-sizing:border-box"></div><div style="font-size:13px;font-weight:800">Resting · no edge</div></div>
+<div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:150px;height:96px;border-radius:24px;background:#fff;box-shadow:0 12px 24px rgba(0,0,0,.12)"></div><div style="font-size:13px;font-weight:800;color:#C0564A">✕ Never: blurred shadow</div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">06 · ICONS · 24 GRID, ROUNDED, FILLED</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:18px 10px">
+<sc-for list="{{ icons }}" as="i"><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:48px;height:48px;border-radius:24px;background:{{ i.tint }};display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="{{ i.n }}" c="{{ i.c }}" s="26" hint-size="26px,26px"></dc-import></div><div style="font-size:11px;color:#6B6F66;font-family:ui-monospace,Menlo,monospace">{{ i.n }}</div></div></sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">07 · COMPONENTS</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:40px 48px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-size:20px;font-weight:900">Habit card</div>
+<div style="width:353px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#9A968D">DUE</div><dc-import name="HabitCard" title="Meditate" sub="10 minutes" color="lavender" icon="lotus" state="due" streak="5" hint-size="353px,76px"></dc-import>
+<div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#9A968D">IN PROGRESS · COUNT</div><dc-import name="HabitCard" title="Drink water" sub="4 of 8 glasses" color="sky" icon="drop" state="progress" kind="count" progress="0.5" streak="11" hint-size="353px,76px"></dc-import>
+<div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#9A968D">IN PROGRESS · WEEKLY</div><dc-import name="HabitCard" title="Gym" sub="2 of 4 this week" color="tangerine" icon="dumbbell" state="progress" kind="weekly" progress="0.5" streak="8" unit="wk" hint-size="353px,76px"></dc-import>
+<div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#9A968D">COMPLETED</div><dc-import name="HabitCard" title="Read" sub="Done" color="sunflower" icon="book" state="done" streak="24" hint-size="353px,76px"></dc-import>
+<div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#9A968D">PRESSED</div><dc-import name="HabitCard" title="Meditate" sub="10 minutes" color="lavender" icon="lotus" state="due" streak="5" pressed="true" hint-size="353px,76px"></dc-import>
+<div style="font-size:11px;font-weight:800;letter-spacing:.5px;color:#9A968D">REST DAY</div><dc-import name="HabitCard" title="Walk" sub="Rest day · back tomorrow" color="teal" icon="shoe" state="rest" streak="3" unit="wk" hint-size="353px,76px"></dc-import>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:30px">
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Check controls</div><div style="font-size:14px;color:#6B6F66;margin-top:-8px">There is one done style, everywhere.</div>
+<div style="display:flex;gap:26px;align-items:center;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:44px;height:44px;border-radius:22px;border:5px solid #EEE8FE;box-sizing:border-box"></div><div style="font-size:12px;color:#6B6F66">Empty</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:44px;height:44px;border-radius:22px;background:conic-gradient(#4DA8F0 0 50%,#E3F0FC 50% 100%);display:flex;align-items:center;justify-content:center"><div style="width:34px;height:34px;border-radius:17px;background:#fff;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="plus" c="#2F86D0" s="16" hint-size="16px,16px"></dc-import></div></div><div style="font-size:12px;color:#6B6F66">Counter</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:44px;height:44px;border-radius:22px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="26" hint-size="26px,26px"></dc-import></div><div style="font-size:12px;color:#6B6F66">Done</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:13px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="16" hint-size="16px,16px"></dc-import></div><div style="font-size:12px;color:#6B6F66">Done · small</div></div>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Daily badge</div>
+<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:24px;background:#fff;box-shadow:0 3px 0 #ECE4D6"><div style="font-size:17px;font-weight:900">1/4</div><div style="width:30px;height:30px;border-radius:15px;background:conic-gradient(#58C27D 0 25%,#ECE4D6 25% 100%);display:flex;align-items:center;justify-content:center"><div style="width:21px;height:21px;border-radius:11px;background:#fff"></div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:24px;background:#fff;box-shadow:0 3px 0 #ECE4D6"><div style="font-size:17px;font-weight:900">3/4</div><div style="width:30px;height:30px;border-radius:15px;background:conic-gradient(#58C27D 0 75%,#ECE4D6 75% 100%);display:flex;align-items:center;justify-content:center"><div style="width:21px;height:21px;border-radius:11px;background:#fff"></div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:24px;background:#fff;box-shadow:0 3px 0 #EBD28A"><div style="font-size:17px;font-weight:900">4/4</div><div style="width:30px;height:30px;border-radius:15px;background:#58C27D;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="check" c="#fff" s="18" hint-size="18px,18px"></dc-import></div></div>
+</div><div style="font-size:13px;color:#6B6F66">Counts only habits due today. Rest days are excluded.</div></div>
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Buttons</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:380px">
+<div style="height:56px;border-radius:28px;background:#58C27D;box-shadow:0 4px 0 #3E9A5C;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 120ms cubic-bezier(.34,1.56,.64,1)" style-active="transform:translateY(4px);box-shadow:0 0 0 #3E9A5C">Primary</div>
+<div style="height:56px;border-radius:28px;background:#58C27D;color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;transform:translateY(4px)">Pressed</div>
+<div style="height:52px;border-radius:28px;background:#fff;border:2px solid #ECE4D6;box-shadow:0 4px 0 #ECE4D6;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 120ms" style-active="transform:translateY(4px);box-shadow:0 0 0 #ECE4D6">Secondary</div>
+<div style="height:56px;border-radius:28px;background:#ECE4D6;color:#B5B1A8;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center">Disabled</div>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Segmented toggle</div>
+<div style="width:210px;display:flex;padding:4px;border-radius:18px;background:#F1E7D6"><div style="flex:1;height:36px;border-radius:14px;background:#fff;box-shadow:0 2px 0 #E3D8C4;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">Week</div><div style="flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#8C887F">Month</div></div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:30px">
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Bottom nav + floating action button</div>
+<div style="width:393px;height:140px;position:relative;background:#FBF7F0;border-radius:24px;overflow:hidden;box-shadow:inset 0 0 0 1.5px #ECE4D6"><dc-import name="BottomNav" active="today" style="position:absolute;left:0;right:0;bottom:0" hint-size="393px,84px"></dc-import></div></div>
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Sheet</div>
+<div style="width:393px;height:200px;position:relative;background:rgba(31,42,36,.42);border-radius:24px;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:150px;background:#fff;border-radius:32px 32px 0 0;padding:10px 20px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:40px;height:5px;border-radius:3px;background:#D5CDBF"></div><div style="font-size:20px;font-weight:900">32px top radius, grey handle</div><div style="font-size:14px;color:#6B6F66">The scrim is ink at 42%. Sheets spring up in 380 ms.</div></div></div></div>
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Calendar cells</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:40px;height:36px;border-radius:11px;background:#FF9F43;box-shadow:0 3px 0 #E0822A;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center">9</div><div style="font-size:11px;color:#6B6F66">Done</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:40px;height:36px;border-radius:11px;background:#F6F0E5;color:#6B6F66;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center">10</div><div style="font-size:11px;color:#6B6F66">Not done</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:40px;height:36px;border-radius:11px;border:2px solid #FF9F43;box-sizing:border-box;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center">24</div><div style="font-size:11px;color:#6B6F66">Today</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:40px;height:36px;border-radius:11px;color:#CFC9BE;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center">27</div><div style="font-size:11px;color:#6B6F66">Future</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:54px;height:36px;border-radius:11px;background:#E3F5E9;color:#2F7A48;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center">4/4 ✓</div><div style="font-size:11px;color:#6B6F66">Week hit</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:54px;height:36px;border-radius:11px;background:#FFEBD8;color:#C0661A;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center">2/4</div><div style="font-size:11px;color:#6B6F66">Week open</div></div>
+</div></div>
+<div style="display:flex;gap:28px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Stat card</div><div style="width:112px;background:#fff;border-radius:20px;box-shadow:0 3px 0 #ECE4D6;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:34px;height:34px;border-radius:17px;background:#FFEBD8;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="dumbbell" c="#FF9F43" s="19" hint-size="19px,19px"></dc-import></div><div style="font-size:20px;font-weight:900">96</div><div style="font-size:12px;color:#6B6F66">total workouts</div></div></div>
+<div style="display:flex;flex-direction:column;gap:14px;flex:1;min-width:220px"><div style="font-size:20px;font-weight:900">Story progress bar</div><div style="padding:16px;border-radius:20px;background:#FFEBD8;display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:6px"><div style="flex:1;height:5px;border-radius:3px;background:#FF9F43"></div><div style="flex:1;height:5px;border-radius:3px;background:#FF9F43"></div><div style="flex:1;height:5px;border-radius:3px;background:rgba(31,42,36,.1)"></div><div style="flex:1;height:5px;border-radius:3px;background:rgba(31,42,36,.1)"></div><div style="flex:1;height:5px;border-radius:3px;background:rgba(31,42,36,.1)"></div></div><div style="align-self:flex-end;width:36px;height:36px;border-radius:18px;background:rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center"><dc-import name="Icon" n="close" c="#2F6B45" s="18" hint-size="18px,18px"></dc-import></div></div><div style="font-size:12px;color:#6B6F66">The close button always sits below the bar.</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px"><div style="font-size:20px;font-weight:900">Notification</div>
+<div style="width:373px;padding:13px 14px;border-radius:22px;background:#EEE9E0;display:flex;gap:12px;font-family:-apple-system,system-ui,sans-serif;box-sizing:border-box"><div style="width:38px;height:38px;border-radius:10px;background:#FBF7F0;overflow:hidden;flex:none;display:flex;justify-content:center;padding-top:2px;box-sizing:border-box"><dc-import name="Pip" mood="happy" size="36" shadow="false" hint-size="36px,43px"></dc-import></div><div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:15px;font-weight:600"><span>Glass #5 time 💧</span><span style="font-size:13px;color:#6B6F66;font-weight:400">now</span></div><div style="font-size:15px">Halfway there. I'm cheering from your pocket.</div></div></div></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">08 · PIP</div>
+<div style="font-size:32px;font-weight:900;letter-spacing:-.6px">Moods</div>
+<div style="font-size:15px;color:#6B6F66;max-width:760px;line-height:1.5;margin-top:-12px">A soft jellybean seed. Moods come only from swapping or transforming parts: eyes, mouth, leaf rotation, arm pose and body offset. The character is never redrawn. The leaves always stay on top of the head, and the arms stay short and stubby.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px">
+<sc-for list="{{ moods }}" as="m"><div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px"><dc-import name="Pip" mood="{{ m.id }}" size="130" hint-size="130px,156px"></dc-import><div style="font-size:17px;font-weight:900">{{ m.name }}</div><div style="font-size:12px;color:#6B6F66;text-align:center;line-height:1.4">{{ m.how }}</div></div></sc-for>
+</div>
+<div style="font-size:32px;font-weight:900;letter-spacing:-.6px;margin-top:12px">Props &amp; poses</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px">
+<sc-for list="{{ props }}" as="p"><div style="background:{{ p.bg }};border-radius:24px;padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px"><dc-import name="Pip" mood="{{ p.mood }}" prop="{{ p.id }}" size="130" hint-size="130px,156px"></dc-import><div style="font-size:17px;font-weight:900">{{ p.name }}</div></div></sc-for>
+</div>
+<div style="font-size:32px;font-weight:900;letter-spacing:-.6px;margin-top:12px">Separable parts · for Rive</div>
+<div style="font-size:15px;color:#6B6F66;max-width:760px;line-height:1.5;margin-top:-12px">Each part is its own named group (data-part) in a 200 × 240 artboard, with pivots at the stem tip (100, 46) for the leaves and the shoulders for the arms.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px">
+<sc-for list="{{ parts }}" as="p"><div style="background:#fff;border-radius:20px;box-shadow:0 3px 0 #ECE4D6;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="background:#FBF7F0;border-radius:14px;padding:6px"><dc-import name="Pip" mood="expectant" only="{{ p.id }}" size="90" hint-size="90px,108px"></dc-import></div><div style="font-size:13px;font-weight:800;font-family:ui-monospace,Menlo,monospace">{{ p.id }}</div><div style="font-size:11px;color:#6B6F66;text-align:center">{{ p.note }}</div></div></sc-for>
+</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:20px 24px;display:flex;flex-direction:column;gap:10px;max-width:760px">
+<div style="font-size:17px;font-weight:900">Palette</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><sc-for list="{{ pipColors }}" as="c"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:14px;background:{{ c.hex }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)"></div><div style="font-size:12px"><b>{{ c.name }}</b><br><span style="font-family:ui-monospace,Menlo,monospace;color:#6B6F66">{{ c.hex }}</span></div></div></sc-for></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:12px;font-weight:800;letter-spacing:.5px;color:#3E9A5C">09 · MOTION</div>
+<div style="background:#fff;border-radius:24px;box-shadow:0 3px 0 #ECE4D6;padding:6px 24px;max-width:900px">
+<sc-for list="{{ motion }}" as="m"><div style="display:flex;gap:20px;padding:14px 0;border-bottom:1.5px solid #F3EDE2;flex-wrap:wrap"><div style="width:180px;font-size:15px;font-weight:800">{{ m.name }}</div><div style="width:110px;font-size:13px;font-weight:800;color:#3E9A5C;font-family:ui-monospace,Menlo,monospace">{{ m.t }}</div><div style="flex:1;min-width:240px;font-size:14px;color:#6B6F66;line-height:1.45">{{ m.d }}</div></div></sc-for>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const A = [['Sky blue', 'sky', 'drop', '#4DA8F0', '#3A8BD1', '#E3F0FC', '#2F86D0'], ['Tangerine', 'tangerine', 'dumbbell', '#FF9F43', '#E0822A', '#FFEBD8', '#D9731A'], ['Sunflower', 'sunflower', 'book', '#FFC83D', '#E0AC22', '#FFF4D1', '#C28E0A'], ['Lavender', 'lavender', 'lotus', '#A78BFA', '#8B6FE0', '#EEE8FE', '#7A5CE0'], ['Teal', 'teal', 'shoe', '#2EC4B6', '#22A396', '#DDF6F3', '#1A978A'], ['Coral', 'coral', 'apple', '#FF7A6B', '#E0604F', '#FFE6E2', '#D9533F'], ['Berry', 'berry', 'moon', '#E056A0', '#C03E84', '#FBE3F0', '#C03E84'], ['Leaf green', 'leaf', 'sprout', '#58C27D', '#3E9A5C', '#E3F5E9', '#3E9A5C']];
+    const iconC = ['#4DA8F0', '#FF9F43', '#FFC83D', '#A78BFA', '#2EC4B6', '#FF7A6B', '#E056A0', '#58C27D'], iconT = ['#E3F0FC', '#FFEBD8', '#FFF4D1', '#EEE8FE', '#DDF6F3', '#FFE6E2', '#FBE3F0', '#E3F5E9'];
+    return {
+      neutrals: [['Background', '#FBF7F0'], ['Surface', '#FFFFFF'], ['Hill / fill', '#F1E7D6'], ['Border / edge', '#ECE4D6'], ['Ink', '#1F2A24'], ['Secondary', '#6B6F66'], ['Tertiary', '#B5B1A8'], ['Primary green', '#58C27D'], ['Green edge', '#3E9A5C'], ['Headline green', '#2F6B45']].map(([name, hex]) => ({ name, hex })),
+      accents: A.map(([name, id, icon, base, edge, tint, ink]) => ({ name, icon, base, edge, tint, ink })),
+      grounds: [['Butter', '#FFF3CC', '#FFF6D9→#FFF1C4'], ['Peach', '#FFE9D6', '#FFF0E2→#FFE4CC'], ['Lavender', '#EEE8FE', '#F3EFFE→#E9E1FD'], ['Mint', '#DDF6F3', '#E6F8F4→#D4F2EC'], ['Golden', 'linear-gradient(180deg,#FFD84D,#FFF0B8)', '#FFD84D→#FFF0B8'], ['Dusk', 'linear-gradient(180deg,#D3DAE3,#FBF7F0)', '#D3DAE3→cream'], ['Dark ground', '#131915', '#131915'], ['Dark surface', '#1D2520', '#1D2520']].map(([name, hex, code]) => ({ name, hex, code })),
+      type: [['Display', 'Black 900 · 64–128 · −4%', '128px', 900, '-4px', '#D9731A', '8'], ['H1', 'Black 900 · 32', '32px', 900, '-.8px', '#1F2A24', 'Perfect day'], ['H2', 'ExtraBold 800 · 24', '24px', 800, '-.3px', '#1F2A24', 'How often?'], ['Card title', 'ExtraBold 800 · 18', '18px', 800, '-.2px', '#1F2A24', 'Drink water'], ['Body', 'SemiBold 600 · 16', '16px', 600, '0', '#1F2A24', '5 days is worth saving.'], ['Secondary', 'Regular 400 · 14', '14px', 400, '0', '#6B6F66', '4 of 8 glasses'], ['Label', 'ExtraBold 800 · 12 · caps +0.5', '12px', 800, '.5px', '#2F6B45', 'Thursday, Sep 24']].map(([name, spec, size, w, ls, c, sample]) => ({ name, spec, size, w, ls, c, sample, tt: name === 'Label' ? 'uppercase' : 'none' })),
+      spacing: [['4', '4px', 'Icon to label'], ['8', '8px', 'Base unit'], ['12', '12px', 'Between cards'], ['16', '16px', 'Card padding'], ['20', '20px', 'Screen margin'], ['24', '24px', 'Section gap'], ['32', '32px', 'Hero spacing'], ['48', '48px', 'Large breaks']].map(([v, w, use]) => ({ v, w, use })),
+      radii: [['11px', 'Calendar cell'], ['18px', 'Rows, options'], ['24px', 'Cards'], ['32px', 'Sheets'], ['999px', 'Buttons, pills']].map(([v, use]) => ({ v, use })),
+      icons: ['drop', 'dumbbell', 'book', 'lotus', 'shoe', 'moon', 'apple', 'sprout', 'flame', 'shield', 'check', 'plus', 'minus', 'home', 'chart', 'person', 'bell', 'clock', 'calendar', 'repeat', 'sparkle', 'trophy', 'sun', 'share', 'close', 'arrowL', 'chevR', 'lock'].map((n, i) => ({ n, c: iconC[i % 8], tint: iconT[i % 8] })),
+      moods: [['expectant', 'Expectant', 'Default. Pupils up 3px, small smile, leaves upright.'], ['happy', 'Happy', 'Grin, arms out, body up 8px (bounce), leaves perk ±8°.'], ['cheering', 'Cheering', 'Arms up, open mouth, body up 12px.'], ['proud', 'Proud', 'Grin, hands forward holding the gold trophy.'], ['sleepy', 'Sleepy', 'Closed curves, leaves tilt ±38° but stay on top, "z z".'], ['droopy', 'Droopy', 'Half-lids, small frown, slump. Leaves wilt ±52° forward, still on top. No tears.'], ['relieved', 'Relieved', 'Happy ^ ^ eyes and a grin. Used after a shield.'], ['waving', 'Waving', 'One arm up. Used on Welcome and Progress.']].map(([id, name, how]) => ({ id, name, how })),
+      props: [['book', 'happy', 'Reading', '#FFF4D1'], ['dumbbells', 'cheering', 'Lifting', '#FFEBD8'], ['meditate', 'relieved', 'Meditating', '#EEE8FE'], ['sneakers', 'happy', 'Walking', '#DDF6F3'], ['trophy', 'proud', 'Trophy', '#FFF1C4'], ['bell', 'happy', 'Bell', '#FFF4D1']].map(([id, mood, name, bg]) => ({ id, mood, name, bg })),
+      parts: [['body', 'Capsule + lower shade'], ['leaves', 'Stem + 2 leaves, pivot at stem tip'], ['eyes', 'Swap: open / up / closed / half / ^ ^'], ['blush', '2 ellipses'], ['mouth', 'Swap: smile / grin / open / frown'], ['arms', 'Stubby ellipses, rotate at shoulder'], ['feet', 'Feet / sneakers / crossed legs']].map(([id, note]) => ({ id, note })),
+      pipColors: [['Body', '#F3E6CF'], ['Shade', '#EAD7B7'], ['Arms', '#EBD9BB'], ['Feet', '#E6D1AD'], ['Leaves', '#58C27D'], ['Eyes', '#1F3A2A'], ['Blush', '#F7A8A0']].map(([name, hex]) => ({ name, hex })),
+      motion: [['Spring easing', 'all', 'cubic-bezier(.34, 1.56, .64, 1): overshoots slightly, then settles. Used everywhere.'], ['Card / button press', '120–160 ms', 'Moves down by the edge height, edge → 0. Spring back on release.'], ['Check-off', '≈1100 ms', 'Tick draws in, confetti bursts in the habit color, the flame flares, the streak flips like a counter, an arc of light runs to Pip, Pip cheers, and the card settles.'], ['Sheet', '380 ms', 'Springs up from the bottom while the scrim fades in at 200 ms.'], ['Option expand', '240 ms', 'Height spring. Only the selected option opens.'], ['Perfect day', '≈1600 ms', 'Cards lift away with a 40 ms stagger, the golden wash fades up, and Pip hops to center stage.'], ['Pip idle', '3 s loop', 'A gentle 2px breathe with blinks every 4–6 s. Leaves sway ±3°.'], ['Recap number', '600 ms', 'Counts up from 0, then Pip does its pose loop.']].map(([name, t, d]) => ({ name, t, d }))
+    };
+  }
+}
+</script>
+</body>
+</html>
