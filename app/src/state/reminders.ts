@@ -1,4 +1,5 @@
-import * as Notifications from 'expo-notifications';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
+import type * as NotificationsModule from 'expo-notifications';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import type { IconName } from '@/components/Icon';
@@ -10,26 +11,38 @@ import type { Habit, State } from './types';
 // Local reminders. One gentle nudge when a habit is due, only for the habits
 // that have a rhythm, and never more than asked for.
 
-const supported = Platform.OS !== 'web';
+type N = typeof NotificationsModule;
 
-if (supported) {
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: false, shouldSetBadge: false }),
+// Expo Go on Android dropped expo-notifications in SDK 53: even importing it
+// throws. There, reminders stay off; everywhere else the module loads lazily.
+const expoGoAndroid = Platform.OS === 'android' && Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+export const remindersSupported = Platform.OS !== 'web' && !expoGoAndroid;
+const supported = remindersSupported;
+
+let loaded: Promise<N> | null = null;
+function notifications(): Promise<N> {
+  loaded ??= import('expo-notifications').then(Notifications => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: false, shouldSetBadge: false }),
+    });
+    return Notifications;
   });
+  return loaded;
 }
 
 /** Ask the OS. Called from onboarding step 04 after the soft "Can I nudge you?" screen. */
 export async function askForReminders(): Promise<boolean> {
   if (!supported) return false;
+  const Notifications = await notifications();
   const cur = await Notifications.getPermissionsAsync();
   if (cur.granted) return true;
   if (!cur.canAskAgain) return false;
   return (await Notifications.requestPermissionsAsync()).granted;
 }
 
-type Planned = { title: string; body: string; trigger: Notifications.SchedulableNotificationTriggerInput };
+type Planned = { title: string; body: string; trigger: NotificationsModule.SchedulableNotificationTriggerInput };
 
-export function plan(h: Habit): Planned[] {
+export function plan(Notifications: N, h: Habit): Planned[] {
   const sch = h.schedule;
   if (sch.kind === 'thru') {
     const n = target(h);
@@ -62,7 +75,7 @@ const EMOJI: Partial<Record<IconName, string>> = {
 };
 
 const NUDGE_ID = 'sprout-evening-nudge';
-async function scheduleNudge(s: State, today: DayKey) {
+async function scheduleNudge(Notifications: N, s: State, today: DayKey) {
   await Notifications.cancelScheduledNotificationAsync(NUDGE_ID).catch(() => {});
   if (!s.settings.reminders) return;
   const n = eveningNudge(s, today, new Date());
@@ -84,17 +97,18 @@ export function useReminderSync(state: State, ready: boolean, today: DayKey) {
     if (!supported || !ready || !state.onboarded) return;
     let cancelled = false;
     (async () => {
+      const Notifications = await notifications();
       const perm = await Notifications.getPermissionsAsync();
       if (cancelled || !perm.granted) return;
       await Notifications.cancelAllScheduledNotificationsAsync();
       if (!state.settings.reminders) return;
       for (const h of state.habits.filter(x => !x.archived && !x.paused)) {
-        for (const p of plan(h)) {
+        for (const p of plan(Notifications, h)) {
           if (cancelled) return;
           await Notifications.scheduleNotificationAsync({ content: { title: p.title, body: p.body }, trigger: p.trigger });
         }
       }
-      if (!cancelled) await scheduleNudge(state, today);
+      if (!cancelled) await scheduleNudge(Notifications, state, today);
     })().catch(() => {});
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,7 +119,9 @@ export function useReminderSync(state: State, ready: boolean, today: DayKey) {
   useEffect(() => {
     if (!supported || !ready || !state.onboarded) return;
     const t = setTimeout(() => {
-      Notifications.getPermissionsAsync().then(p => (p.granted ? scheduleNudge(state, today) : undefined)).catch(() => {});
+      notifications()
+        .then(async Notifications => ((await Notifications.getPermissionsAsync()).granted ? scheduleNudge(Notifications, state, today) : undefined))
+        .catch(() => {});
     }, 1500);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps

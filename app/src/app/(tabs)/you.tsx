@@ -11,7 +11,7 @@ import { usePalette } from '@/theme/ThemeProvider';
 import type { ThemePref } from '@/theme/ThemeProvider';
 import { monthName, parseDay } from '@/state/dates';
 import { bestStreak, isWeekly, liveHabits, perfectDayCount, shieldInfo } from '@/state/logic';
-import { askForReminders } from '@/state/reminders';
+import { askForReminders, remindersSupported } from '@/state/reminders';
 import { useStore } from '@/state/store';
 import { confirm } from '@/utils/confirm';
 
@@ -43,6 +43,10 @@ export default function You() {
 
   const toggleReminders = async () => {
     if (state.settings.reminders) return setSettings({ reminders: false });
+    if (!remindersSupported) {
+      await confirm('Reminders need the full app', 'Expo Go on Android can’t schedule notifications. They work in a development build of Sprout.', 'OK', 'Close');
+      return;
+    }
     const ok = await askForReminders();
     setSettings({ reminders: true, notificationsAsked: true });
     if (!ok) await confirm('Reminders are off in Settings', 'Turn on notifications for Sprout in your phone’s Settings and I’ll nudge you right on time.', 'OK', 'Close');
