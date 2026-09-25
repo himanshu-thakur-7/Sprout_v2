@@ -18,7 +18,7 @@ export type Accent = {
 export const ACCENTS: Record<AccentId, Accent> = {
   sky: { id: 'sky', name: 'Sky blue', base: '#4DA8F0', edge: '#3A8BD1', tint: '#E3F0FC', ink: '#2F86D0' },
   tangerine: { id: 'tangerine', name: 'Tangerine', base: '#FF9F43', edge: '#E0822A', tint: '#FFEBD8', ink: '#D9731A' },
-  sunflower: { id: 'sunflower', name: 'Sunflower', base: '#FFC83D', edge: '#E0AC22', tint: '#FFF4D1', ink: '#C28E0A' },
+  sunflower: { id: 'sunflower', name: 'Sunflower', base: '#FFC83D', edge: '#E0AC22', tint: '#FFF4D1', ink: '#A87A00' },
   lavender: { id: 'lavender', name: 'Lavender', base: '#A78BFA', edge: '#8B6FE0', tint: '#EEE8FE', ink: '#7A5CE0' },
   teal: { id: 'teal', name: 'Teal', base: '#2EC4B6', edge: '#22A396', tint: '#DDF6F3', ink: '#1A978A' },
   coral: { id: 'coral', name: 'Coral', base: '#FF7A6B', edge: '#E0604F', tint: '#FFE6E2', ink: '#D9533F' },
@@ -29,18 +29,30 @@ export const ACCENTS: Record<AccentId, Accent> = {
 /** Swatch order used by the Add habit sheet. */
 export const SWATCH_ORDER: AccentId[] = ['leaf', 'sky', 'sunflower', 'coral', 'lavender', 'tangerine', 'teal', 'berry'];
 
-/** Accents whose base is too pale for white text (headers switch to ink). */
-export const LIGHT_ACCENTS: AccentId[] = ['sunflower'];
+/**
+ * Accents whose base can't carry white text (headers, done calendar days, on-day toggles).
+ * Ink #1F2A24 reads at 5.5–7.3:1 on all of these; only berry is dark enough for white.
+ */
+export const LIGHT_ACCENTS: AccentId[] = ['sky', 'tangerine', 'sunflower', 'lavender', 'teal', 'coral', 'leaf'];
+
+/** Text colour that passes contrast on an accent's base fill. */
+export const onAccent = (id: AccentId) => (LIGHT_ACCENTS.includes(id) ? '#1F2A24' : '#FFFFFF');
 
 export const GREEN = {
   primary: '#58C27D',
   edge: '#3E9A5C',
+  /** Button/FAB face: white text on it reads 4.3:1 (the lighter primary stays for rings, fills and ticks). */
+  button: '#2F8A4F',
+  buttonEdge: '#22703D',
   headline: '#2F6B45',
   tint: '#E3F5E9',
   darkHeadline: '#7FD49C',
 };
 
-export const GOLD = { base: '#FFC83D', edge: '#E0AC22', ink: '#C28E0A', ledge: '#EBD28A', glow: '#FFE08A' };
+export const GOLD = { base: '#FFC83D', edge: '#E0AC22', ink: '#A87A00', ledge: '#EBD28A', glow: '#FFE08A', soft: '#FFF6D9', warm: '#FFE58A', shareLedge: '#E3C766' };
+
+/** Evening (after 8 pm) ground. */
+export const DUSK = { top: '#D3DAE3', label: '#4D5F74', moon: '#6D7E93', hill: '#ECE3D5' };
 
 export const PIP = {
   body: '#F3E6CF',
@@ -65,8 +77,17 @@ export type Palette = {
   divider: string;
   ink: string;
   secondary: string;
+  /** Non-text only: chevrons, handles, strike lines, disabled fills. */
   tertiary: string;
+  /** Small secondary text that must still pass 4.5:1. */
+  hint: string;
   label: string;
+  /** Future calendar dates. */
+  future: string;
+  /** Selected-tile/segment underlay ledge. */
+  softLedge: string;
+  /** Dashed outlines (custom tile, ahead cells). */
+  dashed: string;
   /** Resting-card fill (dashed border cards, not-done calendar cells). */
   rest: string;
   restLine: string;
@@ -90,7 +111,11 @@ export const LIGHT: Palette = {
   ink: '#1F2A24',
   secondary: '#6B6F66',
   tertiary: '#B5B1A8',
-  label: '#9A968D',
+  hint: '#736F66',
+  label: '#736F66',
+  future: '#A8A398',
+  softLedge: '#E3D8C4',
+  dashed: '#D5C8B2',
   rest: '#F6F0E5',
   restLine: '#E3D8C4',
   missed: '#EFE7DA',
@@ -98,8 +123,8 @@ export const LIGHT: Palette = {
   scrim: 'rgba(31,42,36,0.42)',
   headline: GREEN.headline,
   navBg: '#FFFFFF',
-  navInactive: '#B5B1A8',
-  navInactiveText: '#9A968D',
+  navInactive: '#9A968D',
+  navInactiveText: '#736F66',
   navActiveText: GREEN.headline,
 };
 
@@ -113,16 +138,20 @@ export const DARK: Palette = {
   ink: '#F2EEE6',
   secondary: '#A3A89E',
   tertiary: '#7E847C',
-  label: '#7E847C',
+  hint: '#9AA096',
+  label: '#9AA096',
+  future: '#6C736B',
+  softLedge: '#2A332D',
+  dashed: '#3A443D',
   rest: '#171E19',
   restLine: '#2A332D',
-  missed: '#26302A',
+  missed: '#2F3A33',
   handle: '#3A443D',
   scrim: 'rgba(0,0,0,0.55)',
   headline: GREEN.darkHeadline,
   navBg: '#1A211C',
-  navInactive: '#5E665F',
-  navInactiveText: '#7E847C',
+  navInactive: '#7E847C',
+  navInactiveText: '#9AA096',
   navActiveText: GREEN.darkHeadline,
 };
 

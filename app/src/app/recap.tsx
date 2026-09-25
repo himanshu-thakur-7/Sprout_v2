@@ -4,7 +4,7 @@ import { Share, View } from 'react-native';
 import Animated, { cancelAnimation, Easing, FadeIn, runOnJS, useSharedValue, withTiming } from 'react-native-reanimated';
 import { StoryCard, storyTheme } from '@/screens/StoryCard';
 import { usePalette } from '@/theme/ThemeProvider';
-import { weekRange } from '@/state/dates';
+import { weekday, weekRange } from '@/state/dates';
 import { buildRecap } from '@/state/recap';
 import { useStore } from '@/state/store';
 
@@ -23,12 +23,17 @@ export default function RecapScreen() {
 
   useEffect(() => { if (recap) markRecapSeen(recap.week); }, [recap, markRecapSeen]);
 
+  const [held, setHeld] = useState(false);
   useEffect(() => {
-    progress.value = 0;
-    if (!recap || final) { progress.value = 1; return; }
-    progress.value = withTiming(1, { duration: AUTO_MS, easing: Easing.linear }, done => { if (done) runOnJS(setI)(i + 1); });
+    if (!recap || final) { progress.set(1); return; }
+    if (held) { cancelAnimation(progress); return; }
+    // Resume from wherever a hold left the bar; a finished bar means a new card.
+    if (progress.get() >= 1) progress.set(0);
+    const left = 1 - progress.get();
+    progress.set(withTiming(1, { duration: AUTO_MS * left, easing: Easing.linear }, done => { if (done) runOnJS(setI)(i + 1); }));
     return () => cancelAnimation(progress);
-  }, [i, final, recap, progress]);
+  }, [i, final, recap, progress, held]);
+  const go = (n: number) => { progress.set(0); setHeld(false); setI(Math.max(0, Math.min(total - 1, n))); };
 
   const close = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
@@ -38,7 +43,7 @@ export default function RecapScreen() {
 
   const share = () => {
     const lines = recap.cards.map(c => `${c.habit.name}: ${c.big}`).join('\n');
-    Share.share({ message: `My week in Sprout (${weekRange(recap.week)}) 🌱\n${recap.kept} habits kept.\n${lines}` }).catch(() => {});
+    Share.share({ message: `My week in Sprout (${weekRange(recap.week)}) 🌱\n${recap.kept} of ${recap.total} habits kept.\n${lines}` }).catch(() => {});
   };
 
   const card = recap.cards[i];
@@ -49,13 +54,14 @@ export default function RecapScreen() {
           index={i} total={total} progress={progress} theme={storyTheme(card.habit.color, p.dark)}
           big={card.big} bigIcon={card.bigIcon} bigSize={card.bigIcon ? (card.bigIcon === 'flame' ? 72 : 88) : 128}
           line={card.line} pill={card.pill} mood={card.mood} prop={card.prop}
-          onTap={() => setI(i + 1)} onClose={close}
+          onTap={() => go(i + 1)} onBack={() => go(i - 1)} onHold={setHeld} onClose={close}
         />
       ) : (
         <StoryCard
           index={i} total={total} progress={progress} theme={storyTheme('gold', p.dark)} final
-          big={String(recap.kept)} bigSize={150} line={recap.kept === 1 ? 'habit kept this week.' : 'habits kept this week.'}
-          mood="proud" prop="trophy" onTap={() => {}} onClose={close} onShare={share}
+          big={String(recap.kept)} bigSize={150} line={`of ${recap.total} habit${recap.total === 1 ? '' : 's'} kept this week.`}
+          closing={weekday(today) === 6 ? 'See you next Sunday.' : 'Go get this week.'}
+          mood="proud" prop="trophy" onTap={() => {}} onBack={() => go(i - 1)} onClose={close} onShare={share}
         />
       )}
     </Animated.View>

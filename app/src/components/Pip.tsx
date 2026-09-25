@@ -13,9 +13,9 @@ export type PipMood = 'expectant' | 'happy' | 'cheering' | 'proud' | 'sleepy' | 
 export type PipProp = 'none' | 'book' | 'dumbbells' | 'meditate' | 'sneakers' | 'trophy' | 'bell';
 export type PipPart = 'body' | 'leaves' | 'eyes' | 'blush' | 'mouth' | 'arms' | 'feet' | 'prop';
 
-type Eyes = 'up' | 'open' | 'closed' | 'half' | 'happy' | 'down';
+type Eyes = 'up' | 'open' | 'closed' | 'half' | 'happy' | 'down' | 'sad';
 type Pose = {
-  eyes: Eyes; mouth: 'smile' | 'grin' | 'open' | 'frown' | 'tiny'; leaves: 'up' | 'perky' | 'tilt' | 'wilt';
+  eyes: Eyes; mouth: 'smile' | 'grin' | 'open' | 'frown' | 'tiny' | 'wobble'; leaves: 'up' | 'perky' | 'tilt' | 'wilt';
   arms: keyof typeof ARMS; by: number; sy?: number; zz?: boolean; legs?: 'walk' | 'cross';
 };
 
@@ -25,7 +25,8 @@ const MOODS: Record<PipMood, Pose> = {
   cheering: { eyes: 'open', mouth: 'open', leaves: 'perky', arms: 'up', by: -12 },
   proud: { eyes: 'open', mouth: 'grin', leaves: 'up', arms: 'front', by: 0 },
   sleepy: { eyes: 'closed', mouth: 'tiny', leaves: 'tilt', arms: 'down', by: 2, zz: true },
-  droopy: { eyes: 'half', mouth: 'frown', leaves: 'wilt', arms: 'slump', by: 5, sy: 0.95 },
+  // Sad, never cross: lids droop at the outer corners, a small wobbly mouth.
+  droopy: { eyes: 'sad', mouth: 'wobble', leaves: 'wilt', arms: 'slump', by: 4, sy: 0.96 },
   relieved: { eyes: 'happy', mouth: 'grin', leaves: 'perky', arms: 'out', by: -4 },
   waving: { eyes: 'open', mouth: 'grin', leaves: 'up', arms: 'wave', by: 0 },
 };
@@ -45,13 +46,13 @@ const ARMS = {
   out: [[41, 146, 40], [159, 146, -40]],
   slump: [[49, 160, 10], [151, 160, -10]],
   up: [[37, 100, -32], [163, 100, 32]],
-  wave: [[46, 152, 22], [163, 98, 28]],
+  wave: [[46, 152, 22], [158, 104, 28]],
   front: [[52, 160, 38, 9, 13], [148, 160, -38, 9, 13]],
   lap: [[80, 183, -62, 9, 14], [120, 183, 62, 9, 14]],
   swing: [[47, 150, 32], [153, 150, -6]],
 } satisfies Record<string, ArmSpec[]>;
 
-const LEAF_TILT = { up: [0, 0], perky: [-8, 8], tilt: [-38, 38], wilt: [-52, 52] } as const;
+const LEAF_TILT = { up: [0, 0], perky: [-8, 8], tilt: [-38, 38], wilt: [-35, 35] } as const;
 
 type Props = {
   mood?: PipMood;
@@ -62,9 +63,11 @@ type Props = {
   only?: PipPart;
   /** Idle breathe + blinks. On by default. */
   alive?: boolean;
+  /** 0–1: how much of the day is done. Pip's posture lifts as it fills. */
+  lift?: number;
 };
 
-export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = true, only, alive = true }: Props) {
+export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = true, only, alive = true, lift = 0 }: Props) {
   const effProp: PipProp = mood === 'proud' && prop === 'none' ? 'trophy' : prop;
   const c: Pose = { ...MOODS[mood], ...(effProp !== 'none' ? PROPS[effProp] : {}) };
   const k = size / 200;
@@ -74,9 +77,10 @@ export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = tr
   // Body offset springs between moods (400 ms); idle breathe is a gentle 2px loop.
   const by = useSharedValue(c.by);
   const breathe = useSharedValue(0);
+  const target = c.by - 5 * Math.max(0, Math.min(1, lift));
   useEffect(() => {
-    by.value = withTiming(c.by, { duration: 400, easing: springEase });
-  }, [c.by, by]);
+    by.value = withTiming(target, { duration: 400, easing: springEase });
+  }, [target, by]);
   useEffect(() => {
     if (!alive || only) return;
     breathe.value = withRepeat(withSequence(
@@ -140,6 +144,18 @@ export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = tr
   const eye = (cx: number) => {
     if (eyes === 'closed') return S(`M${cx - 10} 110Q${cx} 118 ${cx + 10} 110`, 3.6);
     if (eyes === 'happy') return S(`M${cx - 10} 114Q${cx} 102 ${cx + 10} 114`, 3.6);
+    if (eyes === 'sad') {
+      // Lid slopes down toward the outside of the face.
+      const outer = cx < 100 ? cx - 12 : cx + 12, inner = cx < 100 ? cx + 12 : cx - 12;
+      return (
+        <G>
+          <Circle cx={cx} cy={111} r={9.5} fill={PIP.eyes} />
+          <Path d={`M${outer} 96L${inner} 96L${inner} 104L${outer} 110Z`} fill={PIP.body} />
+          <Path d={`M${outer} 110L${inner} 104`} stroke={PIP.eyes} strokeWidth={3} strokeLinecap="round" />
+          <Circle cx={cx + (cx < 100 ? -2.5 : 2.5)} cy={115} r={2.2} fill="#fff" />
+        </G>
+      );
+    }
     if (eyes === 'half') return (
       <G>
         <Path d={`M${cx - 10} 110A10 10 0 0 0 ${cx + 10} 110Z`} fill={PIP.eyes} />
@@ -165,6 +181,7 @@ export function Pip({ mood = 'expectant', prop = 'none', size = 160, shadow = tr
     open: <><Path d="M88 124Q100 127 112 124Q111 143 100 143Q89 143 88 124Z" fill={PIP.eyes} />{E(100, 137.5, 6.5, 4, '#F08C86')}</>,
     frown: S('M93 134Q100 128 107 134', 3.2),
     tiny: S('M96 130Q100 132.5 104 130', 3),
+    wobble: S('M92 132Q96 128.5 100 131Q104 133.5 108 130', 3.2),
   };
   const mouth = part('mouth', MO[c.mouth]);
 

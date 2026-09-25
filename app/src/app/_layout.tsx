@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { ToastProvider, useToast } from '@/components/Toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AddHabitProvider } from '@/screens/AddHabitSheet';
 import { useReminderSync } from '@/state/reminders';
@@ -34,11 +35,24 @@ function Themed({ fontsLoaded }: { fontsLoaded: boolean }) {
   if (!show) return null;
   return (
     <ThemeProvider pref={state.settings.theme}>
-      <AddHabitProvider>
-        <Navigator />
-      </AddHabitProvider>
+      <ToastProvider>
+        <AddHabitProvider>
+          <Navigator />
+          <SaveWatcher />
+        </AddHabitProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
+}
+
+/** A failed save shows up as a gentle toast instead of disappearing silently. */
+function SaveWatcher() {
+  const { saveFailed } = useStore();
+  const { show } = useToast();
+  useEffect(() => {
+    if (saveFailed) show({ text: 'I couldn’t save that. I’ll keep trying.', mood: 'droopy', ms: 5000 });
+  }, [saveFailed, show]);
+  return null;
 }
 
 function Navigator() {

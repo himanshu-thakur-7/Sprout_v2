@@ -51,3 +51,9 @@ To see a lived-in account, tap **I already have an account** on the welcome scre
 - The hard ledge (`Ledge`) is a solid layer under the face, which moves down by the ledge height when pressed. Nothing uses a blurred shadow.
 - Pip is ported part by part from `Pip.dc.html` (200 × 240 artboard, same named parts), so the art can move to Rive later. The idle breathe, blinks and the spring on mood changes are done in Reanimated.
 - The prototype fakes the iOS status bar and home indicator. Here the real ones are used, with safe-area insets.
+
+## Design review (`design-review/REVIEW.md`)
+
+The review's fixes are applied across the app: weekly habits only appear as due when logged today or when the week is at risk, the done style (tinted card, "Done · 8:05 am"), a bigger check-off beat, undo and milestone toasts, a perfect-day sequence that waits for the last check and plays once, pause ranges, a backfill calendar on habit detail, an Add/Edit sheet with an icon picker, reminder presets and 15-minute steps, Archive in the Edit sheet, a named Progress grid with blank weekly off-days, recaps that count habits kept, archived habits and a danger zone on You, and onboarding fixes (4 steps, clearer picks, inline custom habit, "Maybe later" leaves reminders off).
+
+The Rive items (M1, M3–M5: `pip.riv`, `fx.riv`) need hand-made `.riv` files, so they aren't included. The same moments use Reanimated for now: Pip's sad/relieved/proud moods and tap reaction, the flame flare and "+1" chip, the shield drop and glow, and the perfect-day burst.

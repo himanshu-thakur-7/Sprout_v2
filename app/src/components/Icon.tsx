@@ -6,10 +6,11 @@ import Svg, { Circle, Path, Rect } from 'react-native-svg';
 export type IconName =
   | 'drop' | 'dumbbell' | 'book' | 'lotus' | 'shoe' | 'moon' | 'apple' | 'flame' | 'shield' | 'check'
   | 'plus' | 'minus' | 'home' | 'chart' | 'person' | 'bell' | 'clock' | 'calendar' | 'repeat' | 'arrowL'
-  | 'arrowR' | 'chevR' | 'chevD' | 'close' | 'share' | 'sparkle' | 'trophy' | 'sun' | 'sprout' | 'lock' | 'pause';
+  | 'arrowR' | 'chevR' | 'chevD' | 'close' | 'share' | 'sparkle' | 'trophy' | 'sun' | 'sprout' | 'lock' | 'pause'
+  | 'pencil' | 'heart' | 'music';
 
 /** Icons a habit can wear. */
-export const HABIT_ICONS: IconName[] = ['drop', 'dumbbell', 'book', 'lotus', 'shoe', 'moon', 'apple', 'sprout', 'sun', 'bell'];
+export const HABIT_ICONS: IconName[] = ['drop', 'dumbbell', 'book', 'lotus', 'shoe', 'moon', 'apple', 'sprout', 'sun', 'heart', 'music', 'bell'];
 
 type Props = { n: IconName; c?: string; c2?: string; s?: number };
 
@@ -79,6 +80,9 @@ export function Icon({ n, c = '#1F2A24', c2 = '#FFFFFF', s = 24 }: Props) {
     ],
     lock: () => [r(5, 10.4, 14, 10.6, 3), st('M8.2 10.4V7.8a3.8 3.8 0 0 1 7.6 0v2.6', 2.4)],
     pause: () => [r(6.4, 4.6, 4, 14.8, 2), r(13.6, 4.6, 4, 14.8, 2)],
+    pencil: () => [f('M15.2 4.6a2.2 2.2 0 0 1 3.1 0l1.1 1.1a2.2 2.2 0 0 1 0 3.1L9.2 19 4 20l1-5.2Z')],
+    heart: () => [f('M12 20.6S3 15 3 8.9A4.7 4.7 0 0 1 12 6.8a4.7 4.7 0 0 1 9 2.1C21 15 12 20.6 12 20.6Z')],
+    music: () => [ci(7.4, 17.4, 3.2), ci(17.4, 15.4, 3.2), st('M10.4 17.4V6.2L20.4 4.2V15.4', 2.4), st('M10.4 9.6L20.4 7.6', 2.4)],
   };
 
   const els = (I[n] ?? I.drop)();

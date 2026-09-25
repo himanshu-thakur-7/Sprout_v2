@@ -22,7 +22,8 @@ export type RecapCard = {
   prop: PipProp;
 };
 
-export type Recap = { week: DayKey; cards: RecapCard[]; kept: number };
+/** `kept`: habits whose week was kept (every planned day, the weekly target, or saved by a shield), out of `total`. */
+export type Recap = { week: DayKey; cards: RecapCard[]; kept: number; total: number; checkIns: number };
 
 /** The week a recap covers: this week on Sunday, otherwise last week. */
 export function recapWeek(today: DayKey): DayKey {
@@ -52,7 +53,7 @@ export function buildRecap(s: State, today: DayKey, week = recapWeek(today)): Re
   const habits = liveHabits(s, last).filter(h => h.createdAt <= last);
   if (!habits.length) return null;
 
-  let kept = 0;
+  let kept = 0, total = 0, checkIns = 0;
   const cards: RecapCard[] = [];
   for (const h of habits) {
     const lower = h.name.toLowerCase();
@@ -60,7 +61,8 @@ export function buildRecap(s: State, today: DayKey, week = recapWeek(today)): Re
 
     if (isWeekly(h)) {
       const n = weekCount(s, h, week);
-      kept += n;
+      checkIns += n; total++;
+      if (weekMet(s, h, week) || isShielded(s, h, week)) kept++;
       if (isShielded(s, h, week)) cards.push({ habit: h, kind: 'saved', big: 'Saved', bigIcon: 'shield', line: `Your shield kept ${lower} alive.`, mood: 'relieved', prop });
       else if (weekMet(s, h, week)) {
         const run = weeklyRunEndingAt(s, h, week);
@@ -72,7 +74,9 @@ export function buildRecap(s: State, today: DayKey, week = recapWeek(today)): Re
     const days = Array.from({ length: 7 }, (_, i) => addDays(week, i)).filter(d => d >= h.createdAt && d <= last && isPlannedDay(h, d));
     if (!days.length) continue;
     const done = days.filter(d => isDone(s, h, d)).length;
-    kept += done;
+    const saved = days.filter(d => isShielded(s, h, d)).length;
+    checkIns += done; total++;
+    if (done + saved >= days.length) kept++;
     if (days.some(d => isShielded(s, h, d))) {
       cards.push({ habit: h, kind: 'saved', big: 'Saved', bigIcon: 'shield', line: `Your shield kept ${lower} alive.`, mood: 'relieved', prop });
     } else if (done === days.length) {
@@ -86,7 +90,9 @@ export function buildRecap(s: State, today: DayKey, week = recapWeek(today)): Re
   }
 
   cards.sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind));
-  return { week, cards: cards.slice(0, 4), kept };
+  // Wins first, but always leave room for one honest "could use a little love" card.
+  const wins = cards.filter(c => c.kind !== 'love'), love = cards.find(c => c.kind === 'love');
+  return { week, cards: love ? [...wins.slice(0, 3), love] : wins.slice(0, 4), kept, total, checkIns };
 }
 
 function weeklyRunEndingAt(s: State, h: Habit, w: DayKey): number {

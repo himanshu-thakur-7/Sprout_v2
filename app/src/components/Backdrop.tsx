@@ -2,15 +2,19 @@ import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Svg, { Defs, Ellipse, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 /** The soft hill Pip stands on: a wide ellipse bleeding 100px past each side. */
-export function Hill({ top, color, height = 480, bleed = 100 }: { top: number; color: string; height?: number; bleed?: number }) {
+export function Hill({ top, color, height = 480, bleed = 100, ground = false }: { top: number; color: string; height?: number; bleed?: number; ground?: boolean }) {
   const { width } = useWindowDimensions();
   const w = width + bleed * 2;
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', left: -bleed, top, width: w, height }}>
-      <Svg width={w} height={height}>
-        <Ellipse cx={w / 2} cy={height / 2} rx={w / 2} ry={height / 2} fill={color} />
-      </Svg>
-    </View>
+    <>
+      <View pointerEvents="none" style={{ position: 'absolute', left: -bleed, top, width: w, height }}>
+        <Svg width={w} height={height}>
+          <Ellipse cx={w / 2} cy={height / 2} rx={w / 2} ry={height / 2} fill={color} />
+        </Svg>
+      </View>
+      {/* ground: the hill carries on under everything below it, so its edge never slices through a list. */}
+      {ground ? <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: top + height / 2, bottom: -2000, backgroundColor: color }} /> : null}
+    </>
   );
 }
 

@@ -1,20 +1,25 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
+import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { GOLD, GREEN } from '@/theme/colors';
-import { burstEase } from '@/theme/motion';
 
 // Confetti bursts from the check in the habit colour, with a little green and gold.
 
 type Burst = { id: number; x: number; y: number; color: string };
-type Ctx = { burstFrom: (ref: RefObject<View | null>, color: string) => void };
+type Ctx = { burstFrom: (ref: RefObject<View | null>, color: string) => void; burstAt: (x: number, y: number, color: string) => void };
 
-const ConfettiContext = createContext<Ctx>({ burstFrom: () => {} });
+const ConfettiContext = createContext<Ctx>({ burstFrom: () => {}, burstAt: () => {} });
 export const useConfetti = () => useContext(ConfettiContext);
 
 export function ConfettiLayer({ children }: { children: ReactNode }) {
   const root = useRef<View>(null);
   const [bursts, setBursts] = useState<Burst[]>([]);
+
+  const burstAt = useCallback((x: number, y: number, color: string) => {
+    const b = { id: Date.now() + Math.random(), x, y, color };
+    setBursts(bs => [...bs, b]);
+    setTimeout(() => setBursts(bs => bs.filter(v => v.id !== b.id)), 1300);
+  }, []);
 
   const burstFrom = useCallback((ref: RefObject<View | null>, color: string) => {
     const target = ref.current, host = root.current;
@@ -23,13 +28,13 @@ export function ConfettiLayer({ children }: { children: ReactNode }) {
       target.measureInWindow((x, y, w, h) => {
         const b = { id: Date.now() + Math.random(), x: x - hx + w / 2, y: y - hy + h / 2, color };
         setBursts(bs => [...bs, b]);
-        setTimeout(() => setBursts(bs => bs.filter(v => v.id !== b.id)), 1000);
+        setTimeout(() => setBursts(bs => bs.filter(v => v.id !== b.id)), 1300);
       });
     });
   }, []);
 
   return (
-    <ConfettiContext.Provider value={{ burstFrom }}>
+    <ConfettiContext.Provider value={{ burstFrom, burstAt }}>
       <View ref={root} style={{ flex: 1 }} collapsable={false}>
         {children}
         <View pointerEvents="none" style={[StyleSheet.absoluteFill, { zIndex: 20 }]}>
@@ -40,30 +45,43 @@ export function ConfettiLayer({ children }: { children: ReactNode }) {
   );
 }
 
+const PIECES = 28;
+const DURATION = 1100;
+const GRAVITY = 900; // px/s²
+
+/** 28 pieces fire from the check with an upward bias, arc under gravity, spin, and fade in the last 30%. */
 function BurstView({ x, y, color }: Burst) {
   const t = useSharedValue(0);
-  useEffect(() => { t.value = withTiming(1, { duration: 800, easing: burstEase }); }, [t]);
+  useEffect(() => { t.value = withTiming(1, { duration: DURATION, easing: Easing.linear }); }, [t]);
+  const tint = color + '66';
   return (
     <View style={{ position: 'absolute', left: x, top: y }}>
-      {Array.from({ length: 18 }, (_, i) => {
-        const a = (i / 18) * Math.PI * 2 + (i % 3) * 0.2, dist = 40 + ((i * 37) % 34), sq = i % 3 === 0;
+      {Array.from({ length: PIECES }, (_, i) => {
+        // Deterministic spread: golden-angle directions, biased upward.
+        const a = -Math.PI / 2 + (((i * 137.5) % 360) - 180) * (Math.PI / 180) * 0.85;
+        const speed = 170 + ((i * 53) % 130);
+        const shape = i % 3;
         return (
-          <Piece key={i} t={t} dx={Math.cos(a) * dist} dy={Math.sin(a) * dist} r={(i * 47) % 360}
-            w={sq ? 8 : 6} h={sq ? 8 : 11} radius={sq ? 4 : 2} color={[color, GREEN.primary, GOLD.base, color][i % 4]} />
+          <Piece key={i} t={t} vx={Math.cos(a) * speed} vy={Math.sin(a) * speed} spin={180 + ((i * 71) % 360)}
+            w={shape === 1 ? 8 : 6} h={shape === 1 ? 8 : shape === 2 ? 6 : 11} radius={shape === 1 ? 4 : 2}
+            color={[color, GREEN.primary, GOLD.base, tint][i % 4]} />
         );
       })}
     </View>
   );
 }
 
-function Piece({ t, dx, dy, r, w, h, radius, color }: { t: SharedValue<number>; dx: number; dy: number; r: number; w: number; h: number; radius: number; color: string }) {
-  const style = useAnimatedStyle(() => ({
-    opacity: interpolate(t.value, [0, 0.7, 1], [1, 1, 0]),
-    transform: [
-      { translateX: dx * t.value }, { translateY: dy * t.value },
-      { scale: 0.3 + 0.7 * t.value }, { rotate: `${r * t.value}deg` },
-    ],
-  }));
+function Piece({ t, vx, vy, spin, w, h, radius, color }: { t: SharedValue<number>; vx: number; vy: number; spin: number; w: number; h: number; radius: number; color: string }) {
+  const style = useAnimatedStyle(() => {
+    const s = (t.value * DURATION) / 1000;
+    return {
+      opacity: interpolate(t.value, [0, 0.7, 1], [1, 1, 0]),
+      transform: [
+        { translateX: vx * s }, { translateY: vy * s + 0.5 * GRAVITY * s * s },
+        { scale: interpolate(t.value, [0, 0.12, 1], [0.4, 1, 0.9]) }, { rotate: `${spin * t.value}deg` },
+      ],
+    };
+  });
   return <Animated.View style={[{ position: 'absolute', left: -w / 2, top: -h / 2, width: w, height: h, borderRadius: radius, backgroundColor: color }, style]} />;
 }
 

@@ -1,6 +1,6 @@
-import { addDays, weekday, type DayKey } from './dates';
-import { count, currentStreak, dueOn, isDone, isWeekly, target, weekCount } from './logic';
-import type { Habit, State } from './types';
+import type { DayKey } from './dates';
+import { count, currentStreak, dueOn, isDone, isWeekly, target, weekAtRisk } from './logic';
+import type { State } from './types';
 
 const NUDGE_HOUR = 20;
 const WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
@@ -31,12 +31,6 @@ export function eveningNudge(s: State, today: DayKey, now: Date): { title: strin
   return { title: `Still time to keep your ${n}-${unit} streak alive 🔥`, body, date: at };
 }
 
-/** A weekly habit is at risk when the sessions still needed fill every day left in the week. */
-function weekAtRisk(s: State, h: Habit, today: DayKey): boolean {
-  if (h.schedule.kind !== 'week') return false;
-  const need = h.schedule.perWeek - weekCount(s, h, today, addDays(today, -1));
-  return need >= 7 - weekday(today);
-}
 
 
 const singular = (w: string) => (w.endsWith('sses') ? w.slice(0, -2) : w.endsWith('s') ? w.slice(0, -1) : w);

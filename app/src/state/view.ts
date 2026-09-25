@@ -3,27 +3,35 @@ import { addDays, clockLabel, weekdayName, type DayKey } from './dates';
 import { count, currentStreak, isPlannedDay, statusOn, target, weekCount } from './logic';
 import type { Habit, Schedule, State } from './types';
 
-/** Everything a HabitCard needs for today. */
-export function cardFor(s: State, h: Habit, today: DayKey): Omit<HabitCardProps, 'onTap' | 'onLongPress'> {
+type CardData = Omit<HabitCardProps, 'onCheck' | 'onCheckLongPress' | 'onOpen'>;
+
+/** Everything a HabitCard needs for today. `nowMin` (minutes since midnight) lets past reminder times read as "Any time today". */
+export function cardFor(s: State, h: Habit, today: DayKey, nowMin = 0): CardData {
   const st = statusOn(s, h, today);
-  const base = { title: h.name, color: h.color, icon: h.icon, streak: currentStreak(s, h, today) };
+  const streak = currentStreak(s, h, today);
+  const isNew = streak === 0 && !Object.values(s.logs).some(day => day[h.id]);
+  const base = { title: h.name, color: h.color, icon: h.icon, streak, isNew };
+  const at = s.logs[today]?.[h.id]?.t;
+  const doneLine = `Done · ${at != null ? clockLabel(at) : 'today'}`;
   const sch = h.schedule;
   if (sch.kind === 'thru') {
-    const n = count(s, h, today), t = target(h);
-    return { ...base, kind: 'count', state: n >= t ? 'done' : 'progress', progress: n / t, sub: `${n} of ${t} ${h.unit ?? 'times'}` };
+    const n = count(s, h, today), t = target(h), unitWord = h.unit ?? 'times';
+    return { ...base, kind: 'count', state: n >= t ? 'done' : 'progress', progress: n / t, sub: n >= t ? `${doneLine} · ${t} ${unitWord}` : `${n} of ${t} ${unitWord}` };
   }
   if (sch.kind === 'week') {
-    const n = weekCount(s, h, today, today);
-    if (st === 'rest') return { ...base, kind: 'weekly', state: 'rest', unit: 'wk', sub: 'Week done · back Monday' };
-    return { ...base, kind: 'weekly', state: st === 'done' ? 'done' : 'progress', progress: n / sch.perWeek, unit: 'wk', sub: `${n} of ${sch.perWeek} this week` };
+    const n = weekCount(s, h, today, today), per = sch.perWeek, met = n >= per;
+    const common = { ...base, kind: 'weekly' as const, unit: 'wk', progress: n / per };
+    if (st === 'rest') return { ...common, state: 'rest', sub: 'Week done · back Monday' };
+    if (st === 'done') return met ? { ...common, state: 'done', sub: `${doneLine} · week met` } : { ...common, state: 'done', loggedToday: true, sub: `Logged today · ${n} of ${per}` };
+    return { ...common, state: st === 'open' ? 'open' : 'progress', sub: st === 'open' ? `${n} of ${per} · on track` : `${n} of ${per} this week` };
   }
   if (st === 'rest') return { ...base, kind: 'daily', state: 'rest', sub: `Rest day · back ${nextPlanned(h, today)}` };
-  return { ...base, kind: 'daily', state: st === 'done' ? 'done' : 'due', sub: st === 'done' ? 'Done' : dueLine(h.reminder) };
+  return { ...base, kind: 'daily', state: st === 'done' ? 'done' : 'due', sub: st === 'done' ? doneLine : dueLine(h.reminder, nowMin) };
 }
 
-/** "Tonight, 9 pm" / "Morning, 7:30 am" / "Any time today". */
-function dueLine(reminder: number | null): string {
-  if (reminder == null) return 'Any time today';
+/** "Tonight, 9 pm" / "Morning, 7:30 am"; once the time has passed (or with no reminder), "Any time today". */
+function dueLine(reminder: number | null, nowMin: number): string {
+  if (reminder == null || (nowMin > 0 && nowMin > reminder)) return 'Any time today';
   const label = clockLabel(reminder).replace(':00', '');
   const h = Math.floor(reminder / 60);
   return `${h >= 18 ? 'Tonight' : h < 12 ? 'Morning' : 'Afternoon'}, ${label}`;

@@ -34,25 +34,46 @@ export function weekCount(s: State, h: Habit, d: DayKey, upto: DayKey = addDays(
 
 export const weekMet = (s: State, h: Habit, ws: DayKey) => weekCount(s, h, ws) >= perWeek(h);
 
-export type DayStatus = 'due' | 'progress' | 'done' | 'rest';
+/**
+ * - due: a planned daily habit not done yet
+ * - progress: a counter under way, or a weekly habit whose week is at risk
+ * - open: a weekly habit that's on track; it can be logged but isn't due today
+ * - rest: not planned today (or the week's already met)
+ */
+export type DayStatus = 'due' | 'progress' | 'done' | 'rest' | 'open';
+
+/** Sessions a weekly habit still needs this week, counting only days before d. */
+export function weekNeed(s: State, h: Habit, d: DayKey): number {
+  return perWeek(h) - weekCount(s, h, d, addDays(d, -1));
+}
+
+/** A weekly habit is at risk when the sessions still needed fill every day left in the week (today included). */
+export const weekAtRisk = (s: State, h: Habit, d: DayKey) => isWeekly(h) && weekNeed(s, h, d) >= 7 - weekday(d);
 
 /** A habit's state on a given day, judged only by what was logged up to that day. */
 export function statusOn(s: State, h: Habit, d: DayKey): DayStatus {
   if (isDone(s, h, d)) return 'done';
   if (h.schedule.kind === 'day') return isPlannedDay(h, d) ? 'due' : 'rest';
   if (h.schedule.kind === 'week') {
-    const before = weekCount(s, h, d, addDays(d, -1));
-    return before >= h.schedule.perWeek ? 'rest' : 'progress';
+    if (weekNeed(s, h, d) <= 0) return 'rest';
+    return weekAtRisk(s, h, d) ? 'progress' : 'open';
   }
   return 'progress';
 }
 
-export const isLive = (h: Habit, d: DayKey) => !h.archived && h.createdAt <= d;
+export const isArchived = (h: Habit, d: DayKey) => (h.archivedAt ? d >= h.archivedAt : !!h.archived);
+export const isLive = (h: Habit, d: DayKey) => h.createdAt <= d && !isArchived(h, d);
 export const liveHabits = (s: State, d: DayKey) => s.habits.filter(h => isLive(h, d));
 
-/** Habits that count toward the day's badge: live, not paused, and not resting. */
+export function isPausedOn(h: Habit, d: DayKey): boolean {
+  if (h.pauses?.length) return h.pauses.some(p => p.from <= d && (!p.to || d < p.to));
+  return !!h.paused;
+}
+export const openPause = (h: Habit) => h.pauses?.find(p => !p.to);
+
+/** Habits that count toward the day's badge and perfect day: live, not paused, and actually due (or done). */
 export function dueOn(s: State, d: DayKey) {
-  return liveHabits(s, d).filter(h => !h.paused && statusOn(s, h, d) !== 'rest');
+  return liveHabits(s, d).filter(h => !isPausedOn(h, d) && ['due', 'progress', 'done'].includes(statusOn(s, h, d)));
 }
 
 export function isPerfectDay(s: State, d: DayKey): boolean {
@@ -80,7 +101,7 @@ export function currentStreak(s: State, h: Habit, today: DayKey): number {
 function dailyRunEndingAt(s: State, h: Habit, from: DayKey): number {
   let n = 0;
   for (let d = from, i = 0; d >= h.createdAt && i < 3660; d = addDays(d, -1), i++) {
-    if (!isPlannedDay(h, d)) continue;
+    if (!isPlannedDay(h, d) || isPausedOn(h, d)) continue;
     if (isDone(s, h, d)) n++;
     else if (!isShielded(s, h, d)) break;
   }
@@ -91,23 +112,28 @@ function weeklyRunEndingAt(s: State, h: Habit, fromWeek: DayKey): number {
   const first = weekStart(h.createdAt);
   let n = 0;
   for (let w = fromWeek, i = 0; w >= first && i < 520; w = addDays(w, -7), i++) {
+    if (weekPaused(h, w)) continue;
     if (weekMet(s, h, w)) n++;
     else if (!isShielded(s, h, w)) break;
   }
   return n;
 }
 
+/** Any paused day in a week excuses that week. */
+const weekPaused = (h: Habit, ws: DayKey) => Array.from({ length: 7 }, (_, i) => addDays(ws, i)).some(d => isPausedOn(h, d));
+
 export function bestStreak(s: State, h: Habit, today: DayKey): number {
   let best = 0, run = 0;
   if (isWeekly(h)) {
     for (let w = weekStart(h.createdAt); w <= today; w = addDays(w, 7)) {
+      if (weekPaused(h, w) && !weekMet(s, h, w)) continue;
       if (weekMet(s, h, w)) best = Math.max(best, ++run);
       else if (!isShielded(s, h, w) && w !== weekStart(today)) run = 0;
     }
     return best;
   }
   for (let d = h.createdAt; d <= today; d = addDays(d, 1)) {
-    if (!isPlannedDay(h, d)) continue;
+    if (!isPlannedDay(h, d) || isPausedOn(h, d)) continue;
     if (isDone(s, h, d)) best = Math.max(best, ++run);
     else if (!isShielded(s, h, d) && d !== today) run = 0;
   }
@@ -120,17 +146,17 @@ export type Slip = { habit: Habit; period: DayKey; key: string; lost: number; un
 
 /** The most recent period (yesterday, or last week for weekly habits) was missed with a live streak behind it. */
 export function findSlip(s: State, h: Habit, today: DayKey): Slip | null {
-  if (h.paused || h.archived) return null;
+  if (isPausedOn(h, today) || !isLive(h, today)) return null;
   let period: DayKey | null = null, lost = 0;
   if (isWeekly(h)) {
     const pw = addDays(weekStart(today), -7);
-    if (pw < weekStart(h.createdAt) || weekMet(s, h, pw) || isShielded(s, h, pw)) return null;
+    if (pw < weekStart(h.createdAt) || weekPaused(h, pw) || weekMet(s, h, pw) || isShielded(s, h, pw)) return null;
     period = pw;
     lost = weeklyRunEndingAt(s, h, addDays(pw, -7));
   } else {
     let d = addDays(today, -1);
     for (let i = 0; i < 7 && !isPlannedDay(h, d); i++) d = addDays(d, -1);
-    if (d < h.createdAt || !isPlannedDay(h, d) || isDone(s, h, d) || isShielded(s, h, d)) return null;
+    if (d < h.createdAt || !isPlannedDay(h, d) || isPausedOn(h, d) || isDone(s, h, d) || isShielded(s, h, d)) return null;
     period = d;
     lost = dailyRunEndingAt(s, h, addDays(d, -1));
   }

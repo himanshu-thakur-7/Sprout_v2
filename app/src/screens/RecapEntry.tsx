@@ -19,7 +19,7 @@ export function RecapEntry({ recap, title = 'Your week in Sprout' }: { recap: Re
       </View>
       <View style={{ flex: 1, minWidth: 0 }}>
         <Txt size={17} w={800} numberOfLines={1}>{title}</Txt>
-        <Txt size={14} w={400} color={p.secondary} numberOfLines={1}>{`${weekRange(recap.week)} · ${recap.kept} kept`}</Txt>
+        <Txt size={14} w={400} color={p.secondary} numberOfLines={1}>{`${weekRange(recap.week)} · ${recap.kept} of ${recap.total} habits kept`}</Txt>
       </View>
       <Icon n="chevR" c={p.tertiary} s={20} />
     </Ledge>

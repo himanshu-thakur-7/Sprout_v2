@@ -47,6 +47,24 @@ export function Ledge({
 
   const interactive = !!(onPress || onLongPress) && !disabled;
 
+  const body = (
+    <>
+      {d > 0 ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[{ position: 'absolute', left: 0, right: 0, top: d, bottom: 0, borderRadius: radius, backgroundColor: edge }, ledge]}
+        />
+      ) : null}
+      <Animated.View style={[{ borderRadius: radius }, style, face]}>{children}</Animated.View>
+    </>
+  );
+
+  // A ledge that only frames interactive children must not be a (disabled) pressable itself:
+  // that would mark everything inside it as disabled for screen readers and on web.
+  if (!interactive && !disabled) {
+    return <View accessibilityLabel={accessibilityLabel} style={[{ paddingBottom: d }, outerStyle]}>{body}</View>;
+  }
+
   return (
     <Pressable
       onPress={interactive ? onPress : undefined}
@@ -59,13 +77,7 @@ export function Ledge({
       accessibilityState={accessibilityState}
       style={[{ paddingBottom: d }, outerStyle]}
     >
-      {d > 0 ? (
-        <Animated.View
-          pointerEvents="none"
-          style={[{ position: 'absolute', left: 0, right: 0, top: d, bottom: 0, borderRadius: radius, backgroundColor: edge }, ledge]}
-        />
-      ) : null}
-      <Animated.View style={[{ borderRadius: radius }, style, face]}>{children}</Animated.View>
+      {body}
     </Pressable>
   );
 }

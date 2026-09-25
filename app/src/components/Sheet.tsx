@@ -18,6 +18,8 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   /** Dismiss when the scrim is tapped. */
   dismissable?: boolean;
+  /** Fixed height (capped to the screen) so the sheet doesn't jump as its content grows; content scrolls inside. */
+  height?: number;
 };
 
 const CloseContext = createContext<() => void>(() => {});
@@ -26,7 +28,7 @@ const CloseContext = createContext<() => void>(() => {});
  * 32pt top radius, grey handle, ink scrim at 42%. Springs up in 380 ms while the scrim fades in over 200 ms.
  * The sheet never grows past the top safe area; taller content scrolls, and the handle closes it.
  */
-export function Sheet({ visible, onClose, children, above, overEdge, scrim, style, dismissable = true }: Props) {
+export function Sheet({ visible, onClose, children, above, overEdge, scrim, style, dismissable = true, height }: Props) {
   const p = usePalette();
   const insets = useSafeAreaInsets();
   const { height: winH } = useWindowDimensions();
@@ -66,7 +68,7 @@ export function Sheet({ visible, onClose, children, above, overEdge, scrim, styl
           <Animated.View style={sheetStyle} pointerEvents="box-none">
             {showAbove ? <View pointerEvents="none" onLayout={e => setAboveH(e.nativeEvent.layout.height)}>{above}</View> : null}
             <View onLayout={e => setSheetH(e.nativeEvent.layout.height)}
-              style={{ maxHeight: maxH, backgroundColor: p.surface, borderTopLeftRadius: 32, borderTopRightRadius: 32, overflow: 'hidden' }}>
+              style={{ maxHeight: maxH, height: height ? Math.min(height, maxH) : undefined, backgroundColor: p.surface, borderTopLeftRadius: 32, borderTopRightRadius: 32, overflow: 'hidden' }}>
               <ScrollView bounces={false} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}
                 contentContainerStyle={[{ paddingBottom: Math.max(insets.bottom, 20) }, style]}>
                 {children}

@@ -14,7 +14,7 @@ export default function TabsLayout() {
       tabBar={({ state, navigation }) => {
         const current = state.routes[state.index]?.name;
         const active = (Object.keys(ROUTE) as NavTab[]).find(k => ROUTE[k] === current) ?? 'today';
-        return <BottomNav active={active} onNav={t => navigation.navigate(ROUTE[t])} onFab={openAdd} />;
+        return <BottomNav active={active} onNav={t => navigation.navigate(ROUTE[t])} onFab={active === 'you' ? undefined : openAdd} />;
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Today' }} />

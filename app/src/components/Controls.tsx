@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, type DimensionValue } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { GOLD, GREEN } from '@/theme/colors';
 import { usePalette } from '@/theme/ThemeProvider';
@@ -32,7 +32,7 @@ export function Stepper({ label, onDown, onUp, min, max, value, minWidth = 140, 
 }
 
 /** M T W T F S S — on days sit on a hard ledge in the accent. */
-export function DayToggles({ days, onToggle, base, edge, onText = '#FFFFFF', size = 36 }: {
+export function DayToggles({ days, onToggle, base, edge, onText = '#FFFFFF', size = 40 }: {
   days: boolean[]; onToggle: (i: number) => void; base: string; edge: string; onText?: string; size?: number;
 }) {
   const p = usePalette();
@@ -41,7 +41,7 @@ export function DayToggles({ days, onToggle, base, edge, onText = '#FFFFFF', siz
       {WEEKDAY_LETTERS.map((l, i) => {
         const on = days[i];
         return (
-          <Pressable key={i} onPress={() => onToggle(i)} accessibilityRole="checkbox" accessibilityState={{ checked: on }}
+          <Pressable key={i} onPress={() => onToggle(i)} hitSlop={4} accessibilityRole="checkbox" accessibilityState={{ checked: on }}
             accessibilityLabel={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][i]}>
             <View style={{ paddingBottom: on ? 3 : 0, marginBottom: on ? 0 : 3 }}>
               {on ? <View style={{ position: 'absolute', left: 0, right: 0, top: 3, bottom: 0, borderRadius: size / 2, backgroundColor: edge }} /> : null}
@@ -86,20 +86,20 @@ export function DailyBadge({ done, total }: { done: number; total: number }) {
 }
 
 /** Pip's speech bubble: tail at bottom-left, neutral ledge. */
-export function Bubble({ text, maxWidth = 116 }: { text: string; maxWidth?: number }) {
+export function Bubble({ text, maxWidth = 168 }: { text: string; maxWidth?: number }) {
   const p = usePalette();
   return (
     <View style={{ paddingBottom: 3, maxWidth }}>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 3, bottom: 0, borderRadius: 16, borderBottomLeftRadius: 4, backgroundColor: p.line }} />
       <View style={{ paddingVertical: 8, paddingHorizontal: 12, borderRadius: 16, borderBottomLeftRadius: 4, backgroundColor: p.surface }}>
-        <Txt size={13} w={700} lh={1.3}>{text}</Txt>
+        <Txt size={14} w={700} lh={1.3}>{text}</Txt>
       </View>
     </View>
   );
 }
 
 /** Week | Month */
-export function Segmented<T extends string>({ options, value, onChange, width = 210 }: { options: [T, string][]; value: T; onChange: (v: T) => void; width?: number }) {
+export function Segmented<T extends string>({ options, value, onChange, width = 210 }: { options: [T, string][]; value: T; onChange: (v: T) => void; width?: DimensionValue }) {
   const p = usePalette();
   return (
     <View style={{ width, flexDirection: 'row', padding: 4, borderRadius: 18, backgroundColor: p.fill }}>
@@ -110,7 +110,7 @@ export function Segmented<T extends string>({ options, value, onChange, width = 
             <View style={{ paddingBottom: on ? 2 : 0, marginBottom: on ? 0 : 2 }}>
               {on ? <View style={{ position: 'absolute', left: 0, right: 0, top: 2, bottom: 0, borderRadius: 14, backgroundColor: p.dark ? p.line : '#E3D8C4' }} /> : null}
               <View style={{ height: 36, borderRadius: 14, backgroundColor: on ? p.surface : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-                <Txt size={15} w={800} color={on ? p.ink : '#8C887F'}>{label}</Txt>
+                <Txt size={15} w={800} color={on ? p.ink : p.hint}>{label}</Txt>
               </View>
             </View>
           </Pressable>
@@ -121,11 +121,11 @@ export function Segmented<T extends string>({ options, value, onChange, width = 
 }
 
 /** Onboarding progress dots: the current step is a 24pt green pill. */
-export function StepDots({ step, total = 3 }: { step: number; total?: number }) {
+export function StepDots({ step, total = 4 }: { step: number; total?: number }) {
   return (
     <View style={{ flexDirection: 'row', gap: 6 }}>
       {Array.from({ length: total }, (_, i) => (
-        <View key={i} style={{ width: i === step ? 24 : 8, height: 8, borderRadius: 4, backgroundColor: i === step ? GREEN.primary : '#DCCFB8' }} />
+        <View key={i} style={{ width: i === step ? 24 : 8, height: 8, borderRadius: 4, backgroundColor: i === step ? GREEN.primary : i < step ? GREEN.edge : '#DCCFB8', opacity: i < step ? 0.5 : 1 }} />
       ))}
     </View>
   );

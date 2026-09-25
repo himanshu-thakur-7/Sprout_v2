@@ -25,7 +25,13 @@ export type Habit = {
   /** Unit word for counters, e.g. "glasses". */
   unit?: string;
   createdAt: DayKey;
+  /** Pause ranges. `to` is the day it resumed (exclusive); an open range means paused now. Paused days never count against a streak. */
+  pauses?: { from: DayKey; to?: DayKey }[];
+  /** Day it was archived; the habit still counts for days before this. */
+  archivedAt?: DayKey;
+  /** @deprecated read via isPausedOn / isArchived; kept so old saves load. */
   paused?: boolean;
+  /** @deprecated see archivedAt. */
   archived?: boolean;
 };
 
@@ -44,6 +50,10 @@ export type State = {
   dismissedSlips: string[];
   /** Week keys (Mondays) whose recap has been watched. */
   recapSeen: string[];
+  /** Days whose perfect-day celebration already played (it plays once, then shows the finished state). */
+  celebrated: DayKey[];
+  /** Habits whose very first check-in has been celebrated. */
+  firstChecks: string[];
   profile: { name: string; since: DayKey | null };
   settings: { reminders: boolean; theme: ThemePref; notificationsAsked: boolean };
 };

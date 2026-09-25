@@ -10,6 +10,8 @@ export const EMPTY_STATE: State = {
   shielded: [],
   dismissedSlips: [],
   recapSeen: [],
+  celebrated: [],
+  firstChecks: [],
   profile: { name: '', since: null },
   settings: { reminders: true, theme: 'system', notificationsAsked: false },
 };

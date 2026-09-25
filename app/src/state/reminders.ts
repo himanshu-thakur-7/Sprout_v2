@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import type { IconName } from '@/components/Icon';
 import type { DayKey } from './dates';
-import { target } from './logic';
+import { isLive, isPausedOn, target } from './logic';
 import { eveningNudge } from './nudge';
 import type { Habit, State } from './types';
 
@@ -91,7 +91,8 @@ async function scheduleNudge(Notifications: N, s: State, today: DayKey) {
 export function useReminderSync(state: State, ready: boolean, today: DayKey) {
   const sig = JSON.stringify([
     state.settings.reminders,
-    state.habits.filter(h => !h.archived && !h.paused).map(h => [h.id, h.name, h.schedule, h.reminder, h.unit]),
+    today,
+    state.habits.filter(h => isLive(h, today) && !isPausedOn(h, today)).map(h => [h.id, h.name, h.schedule, h.reminder, h.unit]),
   ]);
   useEffect(() => {
     if (!supported || !ready || !state.onboarded) return;
@@ -102,7 +103,7 @@ export function useReminderSync(state: State, ready: boolean, today: DayKey) {
       if (cancelled || !perm.granted) return;
       await Notifications.cancelAllScheduledNotificationsAsync();
       if (!state.settings.reminders) return;
-      for (const h of state.habits.filter(x => !x.archived && !x.paused)) {
+      for (const h of state.habits.filter(x => isLive(x, today) && !isPausedOn(x, today))) {
         for (const p of plan(Notifications, h)) {
           if (cancelled) return;
           await Notifications.scheduleNotificationAsync({ content: { title: p.title, body: p.body }, trigger: p.trigger });

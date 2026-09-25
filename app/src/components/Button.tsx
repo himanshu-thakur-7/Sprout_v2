@@ -24,7 +24,7 @@ export function Button({ label, onPress, variant = 'primary', icon, iconC2, disa
     return (
       <View style={[{ height: 56, borderRadius: 28, backgroundColor: p.dark ? p.line : '#ECE4D6', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }, style]}
         accessibilityRole="button" accessibilityState={{ disabled: true }} accessibilityLabel={label}>
-        <Txt size={18} w={900} color={p.tertiary}>{label}</Txt>
+        <Txt size={18} w={900} color={p.hint}>{label}</Txt>
       </View>
     );
   }
@@ -38,9 +38,9 @@ export function Button({ label, onPress, variant = 'primary', icon, iconC2, disa
     );
   }
   return (
-    <Ledge edge={GREEN.edge} radius={28} onPress={onPress} duration={120} outerStyle={style} accessibilityLabel={label}
-      style={{ height: 56, backgroundColor: GREEN.primary, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-      {icon ? <Icon n={icon} c="#FFFFFF" c2={iconC2 ?? GREEN.primary} s={22} /> : null}
+    <Ledge edge={GREEN.buttonEdge} radius={28} onPress={onPress} duration={120} outerStyle={style} accessibilityLabel={label}
+      style={{ height: 56, backgroundColor: GREEN.button, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+      {icon ? <Icon n={icon} c="#FFFFFF" c2={iconC2 ?? GREEN.button} s={22} /> : null}
       <Txt size={18} w={900} color="#FFFFFF">{label}</Txt>
     </Ledge>
   );

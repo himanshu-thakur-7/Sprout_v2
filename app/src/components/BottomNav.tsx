@@ -10,30 +10,33 @@ export type NavTab = 'today' | 'progress' | 'you';
 
 const ITEMS: [NavTab, string, IconName][] = [['today', 'Today', 'home'], ['progress', 'Progress', 'chart'], ['you', 'You', 'person']];
 
-/** Three tabs on the left, the green + floating 34pt above the bar on the right. */
+/** Three tabs and the green +, raised 34pt above the bar in its own slot. Hidden on You. */
 export function BottomNav({ active, onNav, onFab }: { active: NavTab; onNav: (t: NavTab) => void; onFab?: () => void }) {
   const p = usePalette();
   const insets = useSafeAreaInsets();
   return (
     <View style={{
-      backgroundColor: p.navBg, borderTopWidth: 1.5, borderTopColor: p.line, flexDirection: 'row', justifyContent: 'space-around',
-      paddingTop: 10, paddingLeft: 16, paddingRight: 70, paddingBottom: Math.max(insets.bottom, 12), minHeight: 84,
+      backgroundColor: p.navBg, borderTopWidth: 1.5, borderTopColor: p.line, flexDirection: 'row',
+      paddingTop: 10, paddingHorizontal: 8, paddingBottom: Math.max(insets.bottom, 12), minHeight: 84,
     }}>
       {ITEMS.map(([id, label, icon]) => {
         const on = id === active;
         return (
           <Pressable key={id} onPress={() => onNav(id)} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={label}
-            style={{ width: 72, alignItems: 'center', gap: 3 }} hitSlop={8}>
+            style={{ flex: 1, alignItems: 'center', gap: 3, minHeight: 44 }} hitSlop={4}>
             <Icon n={icon} c={on ? GREEN.primary : p.navInactive} s={26} />
             <Txt size={12} w={800} color={on ? p.navActiveText : p.navInactiveText}>{label}</Txt>
           </Pressable>
         );
       })}
       {onFab ? (
-        <Ledge edge={GREEN.edge} radius={30} onPress={onFab} accessibilityLabel="Add habit" outerStyle={{ position: 'absolute', right: 20, top: -34 }}
-          style={{ width: 60, height: 60, backgroundColor: GREEN.primary, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon n="plus" c="#FFFFFF" s={30} />
-        </Ledge>
+        // The + is a raised fourth slot, so the tabs stay evenly spaced.
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <Ledge edge={GREEN.buttonEdge} radius={30} onPress={onFab} accessibilityLabel="Add habit" outerStyle={{ marginTop: -34 }}
+            style={{ width: 60, height: 60, backgroundColor: GREEN.button, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: p.navBg }}>
+            <Icon n="plus" c="#FFFFFF" s={28} />
+          </Ledge>
+        </View>
       ) : null}
     </View>
   );

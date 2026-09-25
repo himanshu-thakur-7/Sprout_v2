@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, type SharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gradient } from '@/components/Backdrop';
@@ -76,12 +76,21 @@ type Props = {
   prop: PipProp;
   final?: boolean;
   onTap: () => void;
+  /** Tap on the left third: previous card. */
+  onBack?: () => void;
+  /** Press and hold pauses the progress bar. */
+  onHold?: (held: boolean) => void;
+  /** Last line on the final card. */
+  closing?: string;
   onClose: () => void;
   onShare?: () => void;
 };
 
-export function StoryCard({ index, total, progress, theme: t, big, bigIcon, bigSize = 128, line, pill, mood, prop, final, onTap, onClose, onShare }: Props) {
+export function StoryCard({ index, total, progress, theme: t, big, bigIcon, bigSize = 128, line, pill, mood, prop, final, onTap, onBack, onHold, closing = 'Go get this week.', onClose, onShare }: Props) {
   const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
+  const held = useRef(false);
+  const pipSize = height < 700 ? 160 : 200;
   const segFill = useAnimatedStyle(() => ({ width: `${Math.round(progress.value * 100)}%` }));
 
   // Pip's pose loop: a little hop every 1.6 s.
@@ -97,11 +106,15 @@ export function StoryCard({ index, total, progress, theme: t, big, bigIcon, bigS
   const hopStyle = useAnimatedStyle(() => ({ transform: [{ translateY: hop.value }] }));
 
   return (
-    <Pressable onPress={final ? undefined : onTap} style={{ flex: 1, overflow: 'hidden' }} accessibilityLabel={`${big} ${line}. Tap to continue.`}>
+    <Pressable
+      onPress={e => { if (held.current) return; if (e.nativeEvent.locationX < width / 3) onBack?.(); else if (!final) onTap(); }}
+      onLongPress={() => { held.current = true; onHold?.(true); }} delayLongPress={250}
+      onPressOut={() => { if (held.current) { onHold?.(false); setTimeout(() => { held.current = false; }, 0); } }}
+      style={{ flex: 1, overflow: 'hidden' }} accessibilityLabel={`${big} ${line}.${final ? '' : ' Tap to continue.'}`}>
       <Gradient id={`story${index}`} stops={t.stops} />
       <View style={{ position: 'absolute', left: -60, top: 120, width: 220, height: 220, borderRadius: 110, backgroundColor: t.glow }} />
       <View style={{ position: 'absolute', right: -70, top: 520, width: 260, height: 260, borderRadius: 130, backgroundColor: t.glow }} />
-      {final ? <Scatter n={30} cx={196} cy={470} sx={180} sy={220} seed={0} colors={['#4DA8F0', '#FF9F43', '#A78BFA', '#FF7A6B', '#2EC4B6', '#58C27D']} /> : null}
+      {final ? <Scatter n={30} cx={width / 2} cy={height * 0.58} sx={width * 0.46} sy={height * 0.2} seed={0} colors={['#4DA8F0', '#FF9F43', '#A78BFA', '#FF7A6B', '#2EC4B6', '#58C27D']} /> : null}
 
       <View style={{ flex: 1, paddingTop: insets.top }}>
         <View style={{ flexDirection: 'row', gap: 6, paddingTop: 6, paddingHorizontal: 20 }}>
@@ -136,26 +149,26 @@ export function StoryCard({ index, total, progress, theme: t, big, bigIcon, bigS
           {[[70, 40, 22], [300, 70, 16], [52, 200, 14], [318, 210, 20]].map(([x, y, s]) => (
             <View key={x} style={{ position: 'absolute', left: x, top: y }}><Icon n="sparkle" c={t.sparkle} s={s} /></View>
           ))}
-          <Animated.View style={hopStyle}><Pip mood={mood} prop={prop} size={200} /></Animated.View>
+          <Animated.View style={hopStyle}><Pip mood={mood} prop={prop} size={pipSize} /></Animated.View>
         </View>
 
         {final ? (
           <View style={{ alignItems: 'center', gap: 18, paddingHorizontal: 20, paddingBottom: Math.max(insets.bottom, 20) + 20 }}>
-            <Txt size={24} w={900} color={t.numC}>See you Monday.</Txt>
+            <Txt size={24} w={900} color={t.numC}>{closing}</Txt>
             <View style={{ flexDirection: 'row', gap: 12, alignSelf: 'stretch' }}>
               <Ledge edge="#E3C766" radius={28} onPress={onShare} outerStyle={{ flex: 1 }} accessibilityLabel="Share"
                 style={{ height: 56, backgroundColor: '#FFFFFF', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                 <Icon n="share" c="#1F2A24" s={20} />
                 <Txt size={18} w={900} color="#1F2A24">Share</Txt>
               </Ledge>
-              <Ledge edge={GREEN.edge} radius={28} onPress={onClose} outerStyle={{ flex: 1 }} accessibilityLabel="Done"
-                style={{ height: 56, backgroundColor: GREEN.primary, alignItems: 'center', justifyContent: 'center' }}>
+              <Ledge edge={GREEN.buttonEdge} radius={28} onPress={onClose} outerStyle={{ flex: 1 }} accessibilityLabel="Done"
+                style={{ height: 56, backgroundColor: GREEN.button, alignItems: 'center', justifyContent: 'center' }}>
                 <Txt size={18} w={900} color="#FFFFFF">Done</Txt>
               </Ledge>
             </View>
           </View>
         ) : (
-          <Txt size={15} w={700} color={t.tapC} align="center" style={{ paddingBottom: Math.max(insets.bottom, 10) + 34 }}>Tap to continue</Txt>
+          <Txt size={15} w={700} color={t.tapC} align="center" style={{ paddingBottom: Math.max(insets.bottom, 10) + 34 }}>Tap to continue · hold to pause</Txt>
         )}
       </View>
     </Pressable>
